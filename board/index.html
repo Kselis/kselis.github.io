@@ -20,19 +20,35 @@
       position: fixed;
       top: 10px;
       left: 10px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.3);
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       z-index: 1;
+      backdrop-filter: blur(8px);
     }
+    .toolbar select,
     .toolbar input[type="color"],
     .toolbar input[type="range"],
-    .toolbar select,
     .toolbar button {
-      width: 100%;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .toolbar button {
+      background-color: #ffffffaa;
+    }
+    #zoomSlider {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 120px;
+      z-index: 1;
     }
   </style>
 </head>
@@ -47,26 +63,23 @@
     </select>
     <input type="color" id="color" value="#000000" />
     <input type="range" id="size" min="1" max="50" value="5" />
-    <button onclick="zoomIn()">Zoom In</button>
-    <button onclick="zoomOut()">Zoom Out</button>
-    <button onclick="saveAsPDF()">Save as PDF</button>
+    <button onclick="saveAsPDF()">📄</button>
   </div>
+  <input type="range" id="zoomSlider" min="0.1" max="5" step="0.1" value="1" />
   <canvas id="board"></canvas>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     const canvas = document.getElementById('board');
     const ctx = canvas.getContext('2d');
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    const zoomSlider = document.getElementById('zoomSlider');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     let tool = 'pen';
     let isDrawing = false;
     let isPanning = false;
-    let startX, startY;
-    let endX, endY;
+    let startX, startY, endX, endY;
     let scale = 1;
     let offsetX = 0;
     let offsetY = 0;
@@ -78,10 +91,26 @@
     const colorPicker = document.getElementById('color');
     const sizePicker = document.getElementById('size');
     const toolSelector = document.getElementById('tool');
-
-    let savedImageData;
-
     toolSelector.addEventListener('change', () => tool = toolSelector.value);
+    zoomSlider.addEventListener('input', () => {
+      scale = parseFloat(zoomSlider.value);
+      redrawAll();
+    });
+
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      const zoomIntensity = 0.1;
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const factor = 1 + direction * zoomIntensity;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = (e.clientX - rect.left - offsetX) / scale;
+      const mouseY = (e.clientY - rect.top - offsetY) / scale;
+      scale *= factor;
+      offsetX = e.clientX - mouseX * scale;
+      offsetY = e.clientY - mouseY * scale;
+      zoomSlider.value = scale.toFixed(2);
+      redrawAll();
+    });
 
     function getTransformedCoords(e) {
       return {
@@ -99,7 +128,7 @@
         ctxOverride.lineWidth = path.size;
         ctxOverride.lineCap = 'round';
         ctxOverride.lineJoin = 'round';
-        if (path.tool === 'pen' || path.tool === 'eraser' || path.tool === 'line') {
+        if (path.tool === 'pen' || path.tool === 'eraser') {
           ctxOverride.beginPath();
           ctxOverride.moveTo(path.points[0].x, path.points[0].y);
           for (let i = 1; i < path.points.length - 1; i++) {
@@ -110,6 +139,11 @@
             ctxOverride.quadraticCurveTo(path.points[i].x, path.points[i].y, midPoint.x, midPoint.y);
           }
           ctxOverride.stroke();
+        } else if (path.tool === 'line') {
+          ctxOverride.beginPath();
+          ctxOverride.moveTo(path.points[0].x, path.points[0].y);
+          ctxOverride.lineTo(path.points[1].x, path.points[1].y);
+          ctxOverride.stroke();
         } else if (path.tool === 'rect') {
           ctxOverride.strokeRect(...path.rect);
         }
@@ -118,12 +152,11 @@
 
     canvas.addEventListener('mousedown', (e) => {
       const pos = getTransformedCoords(e);
-      if (tool === 'pan') {
+      if (e.button === 2 || tool === 'pan') {
         isPanning = true;
         panStart = { x: e.clientX, y: e.clientY };
         return;
       }
-
       isDrawing = true;
       [startX, startY] = [pos.x, pos.y];
       if (tool === 'pen' || tool === 'eraser') {
@@ -134,12 +167,11 @@
           points: [{ x: startX, y: startY }]
         };
         paths.push(currentPath);
-      } else {
-        savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       }
     });
 
     canvas.addEventListener('mousemove', (e) => {
+      const pos = getTransformedCoords(e);
       if (isPanning) {
         const dx = e.clientX - panStart.x;
         const dy = e.clientY - panStart.y;
@@ -149,17 +181,15 @@
         redrawAll();
         return;
       }
-
       if (!isDrawing) return;
-      const pos = getTransformedCoords(e);
       endX = pos.x;
       endY = pos.y;
-
       if (tool === 'pen' || tool === 'eraser') {
         currentPath.points.push({ x: endX, y: endY });
         redrawAll();
       } else if (tool === 'line' || tool === 'rect') {
-        ctx.putImageData(savedImageData, 0, 0);
+        redrawAll();
+        ctx.save();
         ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
         ctx.strokeStyle = colorPicker.value;
         ctx.lineWidth = sizePicker.value;
@@ -173,6 +203,7 @@
         } else {
           ctx.strokeRect(startX, startY, endX - startX, endY - startY);
         }
+        ctx.restore();
       }
     });
 
@@ -181,12 +212,11 @@
         isPanning = false;
         return;
       }
-
+      if (!isDrawing) return;
       isDrawing = false;
       const pos = getTransformedCoords(e);
       endX = pos.x;
       endY = pos.y;
-
       if (tool === 'line') {
         paths.push({
           tool: 'line',
@@ -208,15 +238,7 @@
       redrawAll();
     });
 
-    function zoomIn() {
-      scale *= 1.2;
-      redrawAll();
-    }
-
-    function zoomOut() {
-      scale /= 1.2;
-      redrawAll();
-    }
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
 
     function saveAsPDF() {
       const tempCanvas = document.createElement('canvas');
