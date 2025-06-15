@@ -217,6 +217,27 @@
       <li><strong>Columns</strong> → Each column is a feature (input variable) or label (output)</li>
     </ul>
   </div>
+  <div class="section" id="types of dataset">
+    <h2>Types of Dataset</h2>
+    <p>In machine learning, before a model is trained, the available dataset is usually divided into three main parts: training, validation, and testing datasets. But why classify dataset? Why split it when we can operate on one single dataset? The answer in my opinion is that this classification is essential for building a model that not only learns patterns from data but also generalizes well to new, unseen data.</p>
+    <p>It is generally divided into 3 Types, let's have a look at them!</p>  
+  </div>
+  <div class="section" id="training dataset">
+    <h2>Training Dataset</h2>
+    <p>The training dataset is the largest portion, typically around 70–80% of the total data, and is used to teach the model by showing it various input-output examples so that model can learn and find patterns and relationships in it. </p>
+  </div>
+  <div class="section" id="validation dataset">
+    <h2>Validation Dataset</h2>
+    <p>The validation dataset, often around 10–15%, is used during training to evaluate the model’s performance and help tune parameters (like learning rate, depth, etc) or avoid issues like overfitting.</p>
+  </div>
+  <div class="section" id="testing dataset">
+    <h2>Testing Dataset</h2>
+    <p>Finally, the testing dataset, usually the remaining 10–15%, is used after training is complete to assess the final accuracy of the model on data it has never seen before.</p>
+  </div>
+  <div class="analogy" id="analogy of classification of dataset">
+    Think of building a machine learning model like preparing for an exam. The training dataset is like your textbook and class notes — it’s what you use to study and learn the concepts. The validation dataset is like your mock tests or practice papers — they help you check how well you're learning and what needs to be improved. Finally, the testing dataset is like your actual exam — it evaluates your final performance on questions you've never seen before. Just like a student shouldn’t look at the real exam paper while preparing, a model shouldn’t see the test data during training. This separation ensures that the model truly understands the patterns and doesn't just memorize examples.
+  </div>
+  
   <a class="button" id="print" onclick="hideTemporarily(); window.print()">Save as PDF</a>
   <a class="button" id="next" href="supervised-learning.html">→</a>
   <script>
