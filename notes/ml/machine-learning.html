@@ -55,6 +55,107 @@
       <li>If you want a machine to perform well (like recognizing diseases, or translating languages), you need to feed it enough good data.</li>
     </ul>
   </div>
+  <div class = "section" id="types of data">
+    <h2>Types of Data</h2>
+    <p>In Machine Learning, data is the key ingredient. The type and quality of data used directly impact how well a model learns and performs. Based on the presence or absence of labels (answers), machine learning data is generally divided into the following types:</p>
+    <ul>
+      <li>Labeled</li>
+      <li>Unlabeled</li>
+    </ul>
+  </div>
+  <div class="section" id="labeled data">
+    <h2>Labeled Data</h2>
+    <p>Labeled data contains both the input and the correct output (label). Each example in the dataset tells the machine what the correct answer should be. This type of data is used in Supervised Learning, where the goal is to learn a mapping from inputs to outputs. For example, a dataset of fruit features (color, shape, size) along with their names (apple, banana) is labeled data.</p>
+  </div>
+  <div section="analogy" id="labeled data analogy">
+    We can understand this with a simple analogy. Imagine a child learning to recognize fruits. A parent shows the child different fruits and says, “This is an apple,” or “This is a banana.” Over time, the child learns to associate certain shapes, colors, and sizes with the correct fruit names. Here, the fruit's features are the input, and the fruit's name is the label. The child is essentially learning from labeled data.<br><br>
+    A similar process happens in machine learning. The machine is shown many examples, each with the correct label, and it learns to make predictions based on that.
+  </div>
+  <div class="section" id="table labeled data">
+    <h2>Sample Labeled Data</h2>
+    <table cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Color</th>
+          <th>Shape</th>
+          <th>Size</th>
+          <th>Fruit Name (Label)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Red</td>
+          <td>Round</td>
+          <td>Small</td>
+          <td>Apple</td>
+        </tr>
+        <tr>
+          <td>Yellow</td>
+          <td>Long</td>
+          <td>Medium</td>
+          <td>Banana</td>
+        </tr>
+        <tr>
+          <td>Green</td>
+          <td>Round</td>
+          <td>Small</td>
+          <td>Apple</td>
+        </tr>
+        <tr>
+          <td>Yellow</td>
+          <td>Round</td>
+          <td>Small</td>
+          <td>Lemon</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>In this table, the machine sees the features of each fruit (color, shape, size) along with the correct name (label). Using this data, it learns how to predict the name of a new fruit just by looking at its features.</p>
+  </div>
+  <div class="section" id="unlabeled data">
+    <h2>Unlabeled Data</h2>
+    <p>Unlabeled data contains only input features, without any correct output or label. This type of data is used in unsupervised learning, where the machine explores the data and tries to find patterns or group similar items on its own — without being told what the correct answer is.</p>
+  </div>
+  <div class="analogy" id="unlabeled data analogy">
+    To understand this better, imagine giving a child a basket full of different fruits, but without telling them the names. The child may try to group similar-looking fruits together — putting round red ones in one pile, long yellow ones in another. Even though they don’t know the names, they are recognizing patterns. This is similar to how a machine works with unlabeled data.<br><br>
+    In machine learning, when we remove the label column from a dataset, the machine is left with only the features. It then applies algorithms like clustering to group or analyze the data.
+  </div>
+  <div class="section" id="table unlabeled data">
+    <h2>Sample Unlabeled Data</h2>
+    <table cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Color</th>
+          <th>Shape</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Red</td>
+          <td>Round</td>
+          <td>Small</td>
+        </tr>
+        <tr>
+          <td>Yellow</td>
+          <td>Long</td>
+          <td>Medium</td>
+        </tr>
+        <tr>
+          <td>Green</td>
+          <td>Round</td>
+          <td>Small</td>
+        </tr>
+        <tr>
+          <td>Yellow</td>
+          <td>Round</td>
+          <td>Small</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      In this table, the machine sees only the features of each fruit — such as color, shape, and size — but not the actual name of the fruit. Since the labels are missing, the machine cannot directly learn which feature set belongs to which fruit. Instead, it tries to group similar rows together based on shared characteristics. For example, it might notice that some fruits are round and small, while others are long and medium-sized. By identifying these patterns, the machine can organize the data into meaningful clusters, even without knowing the actual fruit names.
+    </p>
+  </div>
   <a class="button" id="print" onclick="hideTemporarily(); window.print()">Save as PDF</a>
   <a class="button" id="next" href="supervised-learning.html">→</a>
   <script>
