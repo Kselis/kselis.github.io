@@ -73,6 +73,7 @@
   </div>
   <div class="section" id="table labeled data">
     <h2>Sample Labeled Data</h2>
+    <p>Each row represent 1 labeled data point!</p>
     <table cellpadding="8" cellspacing="0">
       <thead>
         <tr>
@@ -121,6 +122,7 @@
   </div>
   <div class="section" id="table unlabeled data">
     <h2>Sample Unlabeled Data</h2>
+    <p>Each row represents 1 unlabeled data point!</p>
     <table cellpadding="8" cellspacing="0">
       <thead>
         <tr>
@@ -155,6 +157,65 @@
     <p>
       In this table, the machine sees only the features of each fruit — such as color, shape, and size — but not the actual name of the fruit. Since the labels are missing, the machine cannot directly learn which feature set belongs to which fruit. Instead, it tries to group similar rows together based on shared characteristics. For example, it might notice that some fruits are round and small, while others are long and medium-sized. By identifying these patterns, the machine can organize the data into meaningful clusters, even without knowing the actual fruit names.
     </p>
+  </div>
+  <div class="section" id="dataset">
+    <h2>Dataset</h2>
+    <p>A dataset is a structured collection of data that is used to train, test, or evaluate a machine learning model. You can think of it as a digital notebook filled with many examples, where each example (called a record or row) contains information in the form of features (also called columns or attributes).</p>
+    <p>Just like a student studies from a textbook full of examples, a machine learning model learns from a dataset. The better and clearer the dataset, the more accurate the learning.</p>
+  </div>
+  <div class="section" id="difference between data and dataset">
+    <h2>Difference between Data and Dataset</h2>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>Data</th>
+          <th>Dataset</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Definition</td>
+          <td>A single piece or unit of information</td>
+          <td>A structured collection of related data</td>
+        </tr>
+        <tr>
+          <td>Structure</td>
+          <td>May or may not be structured</td>
+          <td>Usually structured (like tables: rows & columns)</td>
+        </tr>
+        <tr>
+          <td>Usage</td>
+          <td>Used as basic input or value</td>
+          <td>Used for training, testing, and evaluating models</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>Single value or a few values</td>
+          <td>Collection of many records</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>"Red", 42, 3.14</td>
+          <td>Table of fruit details or student marks</td>
+        </tr>
+        <tr>
+          <td>Analogy</td>
+          <td>A single word</td>
+          <td>A full paragraph or a page of notes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="analogy" id="difference between dataset and data analogy">
+    Think of data as a single word in a book — it holds meaning, but on its own, it doesn’t tell you much. Now imagine a dataset as a full paragraph or a page filled with many words arranged meaningfully. Just like a paragraph gives you a complete idea or story, a dataset organizes many individual pieces of data into a structure that can be understood and analyzed. Similarly, in a real-world example, one student’s score in Math (say, 85) is a piece of data. But a full table showing the marks of all students in all subjects is a dataset — rich with information, patterns, and insights that can be used for analysis or training machine learning models.
+  </div>
+  <div class="section" id="structure of dataset">
+    <h2>Structure of Dataset</h2>
+    <ul>
+      <li><strong>Rows</strong> → Each row is a single data point or instance</li>
+      <li><strong>Columns</strong> → Each column is a feature (input variable) or label (output)</li>
+    </ul>
   </div>
   <a class="button" id="print" onclick="hideTemporarily(); window.print()">Save as PDF</a>
   <a class="button" id="next" href="supervised-learning.html">→</a>
