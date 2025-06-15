@@ -10,9 +10,9 @@
 </head>
 <body>
   <p>content will be updated soon . . .</p>
-  <a class="button" id="previous" href="supervised-learning.html"><- Previous</a>
+  <a class="button" id="previous" href="supervised-learning.html">←</a>
   <a class="button" id="print" onclick="hideTemporarily(); window.print()">Save as PDF</a>
-  <a class="button" id="next" href="regression-i.html">Next -></a>
+  <a class="button" id="next" href="regression-i.html">→</a>
   <script>
     function hideTemporarily() {
       const element1 = document.getElementById("print");
@@ -24,7 +24,9 @@
 
       // Show it again after 3 seconds (3000 milliseconds)
       setTimeout(() => {
-        element.style.display = "inline-block";
+        element1.style.display = "inline-block";
+        element2.style.display = "inline-block";
+        element3.style.display = "inline-block";
       }, 2000);
     }
   </script>
