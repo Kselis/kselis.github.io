@@ -10,14 +10,15 @@
 </head>
 <body>
   <h1>Introduction to Machine Learning</h1>
-  <p>This document provides a beginner-friendly introduction to Sequence Models, explaining what they are, why they are important, and how they differ from traditional machine learning models. Using simple analogies and real-life examples, it covers the core concepts behind modeling sequential data—like language, time series, and speech.</p>
+  <p>Imagine you’re teaching your little cousin to recognize fruits. You show them a red round fruit and say, “This is an apple.” Then you show a yellow long one and say, “This is a banana.” After seeing a few more apples and bananas, the next time you hand them a fruit they’ve never seen, they guess, “Is this an apple?” based on what they learned.</p>
+  <p>Now imagine doing the same thing with a computer—showing it lots of pictures of apples and bananas, and letting it learn the difference on its own. That’s Machine Learning! It’s like teaching a computer by example, so it can start recognizing patterns and make smart guesses, just like your cousin did.</p>
   <div class="section" id="intro to ml">
     <h2>What is Machine Learning ?</h2>
     <p>Machine Learning is a way of <b>teaching computers</b> to learn from data and examples, instead of giving them step-by-step instructions.</p>
     <p>In simple terms, just like humans learn by practicing and seeing examples (like learning to ride a cycle or solve a math problem), machines can also learn from experience—which in this case is lots of data. Once the computer has learned enough patterns from the data, it can start making decisions, predictions, or recognizing things on its own.</p>
   </div>
   <div class="analogy" id="ml example">
-    <p>If we give a computer thousands of photos of cats and dogs, and tell it which ones are cats and which ones are dogs, it will start noticing patterns (like ears, fur, size). Later, if we show it a new photo, it can guess if it’s a cat or a dog—based on what it has learned earlier.</p>
+    If we give a computer thousands of photos of cats and dogs, and tell it which ones are cats and which ones are dogs, it will start noticing patterns (like ears, fur, size). Later, if we show it a new photo, it can guess if it’s a cat or a dog—based on what it has learned earlier.
   </div>
   <div class="section" id="key idea of ml">
     <h2>Key Idea</h2>
@@ -27,6 +28,33 @@
       <li>Used in: spam filters, recommendation systems (like YouTube/Netflix), voice assistants, self-driving cars, etc.</li>
     </ul>
   </div> 
+  <div class="section" id="data">
+    <h2>Learning with Data</h2>
+    <p>Remember your cousin learning fruits? You showed them many apples and bananas, and they slowly figured out how to tell them apart. But what exactly helped them learn?</p>
+    <p>It was the examples you gave — their size, color, shape, and the correct names (labels).</p>
+    <p>Now, imagine doing this with a computer. You don’t “explain” the logic of what makes an apple an apple. Instead, you feed the computer a lot of data that includes:</p>
+    <ul>
+      <li>Features (like color, shape, size)</li>
+      <li>Labels (like fruit name: apple or banana)</li>
+    </ul>
+    <p>And the computer learns patterns from this data.</p>
+    <p>The more clear, correct, and well-organized the data, the easier it is for the machine to understand and learn. If the data is messy or confusing (e.g., calling a banana an apple), the machine gets confused — just like your cousin would!</p>
+  </div>
+  <div class = "analogy" id = "data definition">
+    Data is the foundation of machine learning. It serves as the source from which machines learn patterns, relationships, and insights. In machine learning, data is generally categorized into two main types: <strong>labeled</strong> and <strong>unlabeled</strong> data.
+  </div>
+  <div class="section" id="analogy">
+    <h2>Analogy</h2>
+    <p>In machine learning, we can understand the learning process through a simple analogy. Imagine the machine as a student trying to learn a concept. Instead of having a teacher explain everything step by step, this student learns by reading a notebook full of examples. In this analogy, the machine is the student, the data is the notebook, and the algorithm is the method the student uses to study. The machine does not receive direct instructions or rules. Instead, it studies the data, looks at many examples, and gradually learns patterns and relationships on its own. This is how machines learn to make predictions or decisions — by identifying patterns in the data they are given.</p>
+  </div>
+  <div class="section" id="importance of data">
+    <h2>Importance of Data</h2>
+    <ul>
+      <li>Machine Learning doesn’t learn by rules, it learns by patterns.</li>
+      <li>Patterns come from data.</li>
+      <li>If you want a machine to perform well (like recognizing diseases, or translating languages), you need to feed it enough good data.</li>
+    </ul>
+  </div>
   <a class="button" id="print" onclick="hideTemporarily(); window.print()">Save as PDF</a>
   <a class="button" id="next" href="supervised-learning.html">→</a>
   <script>
