@@ -4,51 +4,228 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Whiteboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+  
   <style>
+    :root {
+      font-size: 16px;
+      /* Set base font for all UI */
+      font-family: 'Roboto', sans-serif;
+    }
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
+      background-color: #f0f0f0;
     }
     canvas {
       position: absolute;
       top: 0;
       left: 0;
       cursor: crosshair;
+      background-color: #ffffff;
     }
+
+    /* --- Top-Left Toolbar --- */
     .toolbar {
       position: fixed;
-      top: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.3);
-      padding: 10px;
-      border-radius: 12px;
+      top: 0.625rem;
+      left: 0.625rem;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 0.5rem;
+      border-radius: 0.75rem;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      flex-direction: row;
+      gap: 0.5rem;
       z-index: 1;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+      align-items: center;
     }
+    
     .toolbar select,
-    .toolbar input[type="color"],
+    .toolbar input[type="text"],
     .toolbar input[type="range"],
+    .toolbar input[type="number"],
     .toolbar button {
-      width: 40px;
-      height: 40px;
+      height: 2rem;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-family: 'Roboto', sans-serif; /* Ensure UI uses Roboto */
       cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 0 0.5rem;
+      box-sizing: border-box;
+      flex-shrink: 0;
     }
     .toolbar button {
-      background-color: #ffffffaa;
+      width: 2rem;
+      font-size: 1rem;
+      padding: 0;
+    }
+    .toolbar select {
+      min-width: 6.25rem;
+    }
+    .toolbar .separator {
+      width: 1px;
+      height: 1.5rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+
+    /* --- Tool-Specific Options (inline) --- */
+    .tool-group {
+      display: none;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toolbar input[type="range"] {
+      min-width: 6.25rem;
+      padding: 0;
+    }
+    .toolbar input[type="number"] {
+      width: 3.125rem;
+      text-align: center;
+      -moz-appearance: textfield;
+    }
+    .toolbar input::-webkit-outer-spin-button,
+    .toolbar input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* --- Circular Color Picker & Hex --- */
+    .color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+    .toolbar input[type="color"] {
+      width: 1.875rem;
+      height: 1.875rem;
+      padding: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+    }
+    .toolbar input[type="color"]::-webkit-color-swatch {
+      border-radius: 50%;
+    }
+    .toolbar input[type="color"]::-moz-color-swatch {
+      border-radius: 50%;
+    }
+    .hex-input {
+      width: 4.375rem;
+      font-family: monospace;
+      text-transform: uppercase;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    /* --- Bottom Controls (Zoom + Pages) --- */
+    #bottom-controls {
+      position: fixed;
+      bottom: 0.625rem;
+      right: 0.625rem;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    }
+    #bottom-controls button {
+      height: 2rem;
+      width: 2rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      padding: 0;
+    }
+    #bottom-controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    #page-indicator {
+      font-size: 0.875rem;
+      width: 3.75rem;
+      text-align: center;
+      color: #333;
     }
     #zoomSlider {
+      width: 7.5rem;
+      margin: 0;
+    }
+    #zoomValue {
+      font-size: 0.75rem;
+      width: 2.5rem;
+      text-align: center;
+      color: #333;
+    }
+    #bottom-controls .separator {
+      width: 1px;
+      height: 1.5rem;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Dynamic Text Input Area --- */
+    #text-input-area {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 120px;
-      z-index: 1;
+      z-index: 100;
+      font-family: 'Roboto', sans-serif;
+      border: 1px dashed #333;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transform-origin: top left; /* For scaling */
+    }
+    
+    /* --- Mobile "Fragments" UI --- */
+    @media (max-width: 700px) {
+      .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .tool-group {
+        position: fixed;
+        top: 7rem;
+        left: 0.625rem;
+        background: rgba(255, 255, 255, 0.7);
+        padding: 0.5rem;
+        border-radius: 0.75rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 1;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+      }
+      
+      #tool-separator {
+        display: none;
+      }
+      
+      #bottom-controls {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      #page-indicator {
+        width: auto;
+      }
+      #bottom-controls .separator {
+        height: 1px;
+        width: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -59,58 +236,218 @@
       <option value="eraser">Eraser</option>
       <option value="line">Line</option>
       <option value="rect">Rectangle</option>
+      <option value="text">Text</option>
       <option value="pan">Pan</option>
     </select>
-    <input type="color" id="color" value="#000000" />
-    <input type="range" id="size" min="1" max="50" value="5" />
-    <button onclick="saveAsPDF()">📄</button>
+    <button onclick="saveAsPDF()" title="Save as PDF">📄</button>
+    <div class="separator" id="tool-separator"></div>
+
+    <div id="pen-options" class="tool-group">
+      <div class="color-picker-wrapper">
+        <input type="color" id="pen-color" value="#000000" />
+        <input type="text" id="pen-hex" class="hex-input" value="#000000" maxlength="7" />
+      </div>
+      <input type="range" id="pen-size" min="1" max="50" value="5" />
+      <input type="number" id="pen-size-value" min="1" max="50" value="5" />
+    </div>
+    <div id="eraser-options" class="tool-group">
+      <input type="range" id="eraser-size" min="5" max="100" value="20" />
+      <input type="number" id="eraser-size-value" min="5" max="100" value="20" />
+    </div>
+    <div id="line-options" class="tool-group">
+      <div class="color-picker-wrapper">
+        <input type="color" id="line-color" value="#000000" />
+        <input type="text" id="line-hex" class="hex-input" value="#000000" maxlength="7" />
+      </div>
+      <input type="range" id="line-size" min="1" max="20" value="3" />
+      <input type="number" id="line-size-value" min="1" max="20" value="3" />
+    </div>
+    <div id="rect-options" class="tool-group">
+      <div class="color-picker-wrapper">
+        <input type="color" id="rect-color" value="#000000" />
+        <input type="text" id="rect-hex" class="hex-input" value="#000000" maxlength="7" />
+      </div>
+      <input type="range" id="rect-size" min="1" max="20" value="3" />
+      <input type="number" id="rect-size-value" min="1" max="20" value="3" />
+    </div>
+    <div id="text-options" class="tool-group">
+      <div class="color-picker-wrapper">
+        <input type="color" id="text-color" value="#000000" />
+        <input type="text" id="text-hex" class="hex-input" value="#000000" maxlength="7" />
+      </div>
+      <input type="range" id="text-size" min="8" max="120" value="20" />
+      <input type="number" id="text-size-value" min="8" max="120" value="20" />
+    </div>
+    <div id="pan-options" class="tool-group"></div>
   </div>
-  <input type="range" id="zoomSlider" min="0.1" max="5" step="0.1" value="1" />
+
+  <div id="bottom-controls">
+    <button id="prev-page" title="Previous Page">◀️</button>
+    <span id="page-indicator">1 / 1</span>
+    <button id="next-page" title="Next Page">▶️</button>
+    <button id="add-page" title="Add New Page">➕</button>
+    <div class="separator"></div>
+    <span id="zoomValue">100%</span>
+    <input type="range" id="zoomSlider" min="0.1" max="5" step="0.1" value="1" />
+  </div>
+
   <canvas id="board"></canvas>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     const canvas = document.getElementById('board');
     const ctx = canvas.getContext('2d');
-    const zoomSlider = document.getElementById('zoomSlider');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // --- State ---
     let tool = 'pen';
     let isDrawing = false;
     let isPanning = false;
     let startX, startY, endX, endY;
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
     let panStart = { x: 0, y: 0 };
-
-    const paths = [];
     let currentPath = [];
+    let activeTextInput = null; // Track the active text input
 
-    const colorPicker = document.getElementById('color');
-    const sizePicker = document.getElementById('size');
+    // --- Multi-Page State ---
+    let pages = [{ paths: [], offsetX: 0, offsetY: 0, scale: 1 }];
+    let currentPageIndex = 0;
+    
+    const getCurrentPage = () => pages[currentPageIndex];
+    const getCurrentPaths = () => pages[currentPageIndex].paths;
+    let scale = getCurrentPage().scale;
+    let offsetX = getCurrentPage().offsetX;
+    let offsetY = getCurrentPage().offsetY;
+
+    // --- UI Elements ---
     const toolSelector = document.getElementById('tool');
-    toolSelector.addEventListener('change', () => tool = toolSelector.value);
-    zoomSlider.addEventListener('input', () => {
-      scale = parseFloat(zoomSlider.value);
-      redrawAll();
-    });
+    const zoomSlider = document.getElementById('zoomSlider');
+    const zoomValue = document.getElementById('zoomValue');
+    const pageIndicator = document.getElementById('page-indicator');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const addPageBtn = document.getElementById('add-page');
+    const toolSeparator = document.getElementById('tool-separator');
 
-    canvas.addEventListener('wheel', e => {
-      e.preventDefault();
-      const zoomIntensity = 0.1;
-      const direction = e.deltaY > 0 ? -1 : 1;
-      const factor = 1 + direction * zoomIntensity;
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = (e.clientX - rect.left - offsetX) / scale;
-      const mouseY = (e.clientY - rect.top - offsetY) / scale;
-      scale *= factor;
-      offsetX = e.clientX - mouseX * scale;
-      offsetY = e.clientY - mouseY * scale;
-      zoomSlider.value = scale.toFixed(2);
-      redrawAll();
-    });
+    const toolOptions = {
+      pen: document.getElementById('pen-options'),
+      eraser: document.getElementById('eraser-options'),
+      line: document.getElementById('line-options'),
+      rect: document.getElementById('rect-options'),
+      text: document.getElementById('text-options'),
+      pan: document.getElementById('pan-options'),
+    };
+
+    const config = {
+      pen: {
+        color: document.getElementById('pen-color'),
+        size: document.getElementById('pen-size'),
+        sizeValue: document.getElementById('pen-size-value'),
+        hex: document.getElementById('pen-hex'),
+      },
+      eraser: {
+        size: document.getElementById('eraser-size'),
+        sizeValue: document.getElementById('eraser-size-value'),
+      },
+      line: {
+        color: document.getElementById('line-color'),
+        size: document.getElementById('line-size'),
+        sizeValue: document.getElementById('line-size-value'),
+        hex: document.getElementById('line-hex'),
+      },
+      rect: {
+        color: document.getElementById('rect-color'),
+        size: document.getElementById('rect-size'),
+        sizeValue: document.getElementById('rect-size-value'),
+        hex: document.getElementById('rect-hex'),
+      },
+      text: {
+        color: document.getElementById('text-color'),
+        size: document.getElementById('text-size'),
+        sizeValue: document.getElementById('text-size-value'),
+        hex: document.getElementById('text-hex'),
+      },
+      pan: {},
+    };
+
+    // --- Helper Functions ---
+
+    function syncSizeInputs(slider, numberInput) {
+      slider.addEventListener('input', () => numberInput.value = slider.value);
+      numberInput.addEventListener('input', () => slider.value = numberInput.value);
+    }
+
+    function syncColorInputs(colorInput, hexInput) {
+      const hexRegex = /^#([0-9A-F]{3}){1,2}$/i;
+      colorInput.addEventListener('input', () => {
+        hexInput.value = colorInput.value.toUpperCase();
+      });
+      hexInput.addEventListener('change', () => {
+        let val = hexInput.value.toUpperCase();
+        if (val.charAt(0) !== '#') {
+          val = '#' + val;
+        }
+        if (hexRegex.test(val)) {
+          colorInput.value = val;
+        } else {
+          hexInput.value = colorInput.value.toUpperCase(); // Revert
+        }
+      });
+    }
+
+    function setupToolOptions() {
+      // Sync all sliders and number inputs
+      syncSizeInputs(config.pen.size, config.pen.sizeValue);
+      syncSizeInputs(config.eraser.size, config.eraser.sizeValue);
+      syncSizeInputs(config.line.size, config.line.sizeValue);
+      syncSizeInputs(config.rect.size, config.rect.sizeValue);
+      syncSizeInputs(config.text.size, config.text.sizeValue);
+
+      // Sync color pickers and hex inputs
+      syncColorInputs(config.pen.color, config.pen.hex);
+      syncColorInputs(config.line.color, config.line.hex);
+      syncColorInputs(config.rect.color, config.rect.hex);
+      syncColorInputs(config.text.color, config.text.hex);
+
+      // Set initial UI
+      updateToolUI();
+    }
+
+    function updateToolUI() {
+      // Hide all tool option groups
+      for (const key in toolOptions) {
+        toolOptions[key].style.display = 'none';
+      }
+      // Show the active one
+      if (toolOptions[tool]) {
+        toolOptions[tool].style.display = 'flex';
+      }
+      
+      // Update canvas cursor
+      canvas.style.cursor = (tool === 'text') ? 'text' : (tool === 'pan') ? 'grab' : 'crosshair';
+
+      if (window.innerWidth > 700) {
+        toolSeparator.style.display = (tool === 'pan' || tool === 'text') ? 'none' : 'block';
+      } else {
+        toolSeparator.style.display = 'none';
+      }
+    }
+
+    function getCurrentConfig() {
+      const toolConfig = config[tool];
+      if (!toolConfig) return { color: '#000000', size: 1 };
+
+      const size = toolConfig.size ? toolConfig.size.value : 1;
+      let color = '#000000';
+      
+      if (tool === 'eraser') {
+        color = '#000000';
+      } else if (toolConfig.color) {
+        color = toolConfig.color.value;
+      }
+
+      return { color, size };
+    }
 
     function getTransformedCoords(e) {
       return {
@@ -119,24 +456,80 @@
       };
     }
 
-    function redrawAll(ctxOverride = ctx, useTransform = true) {
-      ctxOverride.setTransform(1, 0, 0, 1, 0, 0);
-      ctxOverride.clearRect(0, 0, canvas.width, canvas.height);
-      if (useTransform) ctxOverride.setTransform(scale, 0, 0, scale, offsetX, offsetY);
-      for (let path of paths) {
+    function updateZoomUI() {
+      zoomSlider.value = scale.toFixed(2);
+      zoomValue.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    // --- Page Navigation ---
+
+    function saveCurrentPageSate() {
+      const page = getCurrentPage();
+      page.offsetX = offsetX;
+      page.offsetY = offsetY;
+      page.scale = scale;
+    }
+
+    function loadPage(index) {
+      if (index < 0 || index >= pages.length) return;
+      finalizeText(); // Finalize any open text input
+      saveCurrentPageSate();
+
+      currentPageIndex = index;
+      const newPage = getCurrentPage();
+      offsetX = newPage.offsetX;
+      offsetY = newPage.offsetY;
+      scale = newPage.scale;
+
+      updatePageUI();
+      updateZoomUI();
+      redrawAll();
+    }
+
+    function addPage() {
+      finalizeText();
+      saveCurrentPageSate();
+      pages.push({ paths: [], offsetX: 0, offsetY: 0, scale: 1 });
+      loadPage(pages.length - 1);
+    }
+
+    function updatePageUI() {
+      pageIndicator.textContent = `${currentPageIndex + 1} / ${pages.length}`;
+      prevPageBtn.disabled = (currentPageIndex === 0);
+      nextPageBtn.disabled = (currentPageIndex === pages.length - 1);
+    }
+    
+    // --- Drawing Logic ---
+
+    function drawPaths(ctxOverride, pathsToDraw) {
+      const originalGCO = ctxOverride.globalCompositeOperation;
+
+      for (let path of pathsToDraw) {
         ctxOverride.strokeStyle = path.color;
         ctxOverride.lineWidth = path.size;
         ctxOverride.lineCap = 'round';
         ctxOverride.lineJoin = 'round';
+
+        if (path.tool === 'eraser') {
+          ctxOverride.globalCompositeOperation = 'destination-out';
+        } else {
+          ctxOverride.globalCompositeOperation = 'source-over';
+        }
+
         if (path.tool === 'pen' || path.tool === 'eraser') {
+          // ... (pen/eraser drawing code remains the same) ...
           ctxOverride.beginPath();
+          if (path.points.length === 0) continue;
           ctxOverride.moveTo(path.points[0].x, path.points[0].y);
-          for (let i = 1; i < path.points.length - 1; i++) {
-            const midPoint = {
-              x: (path.points[i].x + path.points[i + 1].x) / 2,
-              y: (path.points[i].y + path.points[i + 1].y) / 2
-            };
-            ctxOverride.quadraticCurveTo(path.points[i].x, path.points[i].y, midPoint.x, midPoint.y);
+          if (path.points.length < 3) {
+            for (let i = 1; i < path.points.length; i++) ctxOverride.lineTo(path.points[i].x, path.points[i].y);
+          } else {
+            let i = 1;
+            for (; i < path.points.length - 2; i++) {
+              const midPoint = { x: (path.points[i].x + path.points[i + 1].x) / 2, y: (path.points[i].y + path.points[i + 1].y) / 2 };
+              ctxOverride.quadraticCurveTo(path.points[i].x, path.points[i].y, midPoint.x, midPoint.y);
+            }
+            ctxOverride.quadraticCurveTo(path.points[i].x, path.points[i].y, path.points[i + 1].x, path.points[i + 1].y);
           }
           ctxOverride.stroke();
         } else if (path.tool === 'line') {
@@ -146,32 +539,162 @@
           ctxOverride.stroke();
         } else if (path.tool === 'rect') {
           ctxOverride.strokeRect(...path.rect);
+        } else if (path.tool === 'text') {
+          ctxOverride.fillStyle = path.color;
+          ctxOverride.font = `${path.size}px Roboto`;
+          ctxOverride.textBaseline = 'top';
+          const lines = path.text.split('\n');
+          const lineHeight = parseFloat(path.size) * 1.2;
+          for (let i = 0; i < lines.length; i++) {
+            ctxOverride.fillText(lines[i], path.x, path.y + (i * lineHeight));
+          }
         }
       }
+      ctxOverride.globalCompositeOperation = originalGCO;
     }
 
+    function redrawAll() {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+      drawPaths(ctx, getCurrentPaths());
+    }
+    
+    // --- Text Tool Logic ---
+    
+    function finalizeText() {
+      if (!activeTextInput) return;
+      
+      const text = activeTextInput.value;
+      const { x, y } = activeTextInput.worldPos;
+      
+      if (text.trim()) {
+        const { color, size } = getCurrentConfig();
+        getCurrentPaths().push({
+          tool: 'text',
+          color,
+          size,
+          text,
+          x,
+          y
+        });
+        redrawAll();
+      }
+      document.body.removeChild(activeTextInput);
+      activeTextInput = null;
+    }
+    
+    function handleTextToolClick(e) {
+      // Finalize previous text input if one exists
+      finalizeText();
+      
+      const pos = getTransformedCoords(e);
+      const { color, size } = getCurrentConfig();
+      
+      const textarea = document.createElement('textarea');
+      textarea.id = 'text-input-area';
+      textarea.worldPos = pos; // Store world coordinates
+      
+      // Position textarea on screen
+      textarea.style.left = `${e.offsetX}px`;
+      textarea.style.top = `${e.offsetY}px`;
+      
+      // Style it to match tool settings, scaled by zoom
+      textarea.style.color = color;
+      textarea.style.font = `${size * scale}px Roboto`;
+      textarea.style.lineHeight = `${parseFloat(size) * 1.2 * scale}px`;
+      textarea.style.width = `${200 * scale}px`; // Start width
+      textarea.style.height = `${(parseFloat(size) * 1.2 + 8) * scale}px`; // Start height
+      
+      // Auto-resize textarea
+      textarea.addEventListener('input', () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.width = 'auto';
+        textarea.style.width = `${textarea.scrollWidth}px`;
+      });
+      
+      // Finalize on blur
+      textarea.addEventListener('blur', finalizeText);
+      
+      document.body.appendChild(textarea);
+      textarea.focus();
+      activeTextInput = textarea;
+    }
+
+    // --- Event Listeners ---
+
+    toolSelector.addEventListener('change', () => {
+      tool = toolSelector.value;
+      finalizeText(); // Finalize text if switching tools
+      updateToolUI();
+    });
+
+    prevPageBtn.addEventListener('click', () => loadPage(currentPageIndex - 1));
+    nextPageBtn.addEventListener('click', () => loadPage(currentPageIndex + 1));
+    addPageBtn.addEventListener('click', addPage);
+
+    zoomSlider.addEventListener('input', () => {
+      scale = parseFloat(zoomSlider.value);
+      updateZoomUI();
+      redrawAll();
+      // Adjust active text input if it exists
+      if (activeTextInput) {
+        const { x, y } = activeTextInput.worldPos;
+        activeTextInput.style.left = `${x * scale + offsetX}px`;
+        activeTextInput.style.top = `${y * scale + offsetY}px`;
+        activeTextInput.style.font = `${config.text.size.value * scale}px Roboto`;
+        activeTextInput.style.lineHeight = `${parseFloat(config.text.size.value) * 1.2 * scale}px`;
+      }
+    });
+
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      finalizeText(); // Finalize text on zoom
+      const zoomIntensity = 0.1;
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const factor = 1 + direction * zoomIntensity;
+      const rect = canvas.getBoundingClientRect();
+
+      const mouseX = (e.clientX - rect.left - offsetX) / scale;
+      const mouseY = (e.clientY - rect.top - offsetY) / scale;
+      scale = Math.max(0.1, Math.min(scale * factor, 5));
+      offsetX = e.clientX - rect.left - mouseX * scale;
+      offsetY = e.clientY - rect.top - mouseY * scale;
+      
+      updateZoomUI();
+      redrawAll();
+    });
+
     canvas.addEventListener('mousedown', (e) => {
+      // If text tool is active, let it handle the click
+      if (tool === 'text') {
+        handleTextToolClick(e);
+        return;
+      }
+      
+      // Finalize text if clicking with another tool
+      finalizeText();
+      
       const pos = getTransformedCoords(e);
       if (e.button === 2 || tool === 'pan') {
         isPanning = true;
         panStart = { x: e.clientX, y: e.clientY };
+        canvas.style.cursor = 'grabbing';
         return;
       }
       isDrawing = true;
       [startX, startY] = [pos.x, pos.y];
+      
+      const { color, size } = getCurrentConfig();
+
       if (tool === 'pen' || tool === 'eraser') {
-        currentPath = {
-          tool,
-          color: tool === 'eraser' ? '#ffffff' : colorPicker.value,
-          size: sizePicker.value,
-          points: [{ x: startX, y: startY }]
-        };
-        paths.push(currentPath);
+        currentPath = { tool, color, size, points: [{ x: startX, y: startY }] };
+        getCurrentPaths().push(currentPath);
       }
     });
 
     canvas.addEventListener('mousemove', (e) => {
-      const pos = getTransformedCoords(e);
       if (isPanning) {
         const dx = e.clientX - panStart.x;
         const dy = e.clientY - panStart.y;
@@ -181,20 +704,23 @@
         redrawAll();
         return;
       }
-      if (!isDrawing) return;
+      if (!isDrawing) return; // Not drawing (and not panning)
+
+      const pos = getTransformedCoords(e);
       endX = pos.x;
       endY = pos.y;
+      
       if (tool === 'pen' || tool === 'eraser') {
         currentPath.points.push({ x: endX, y: endY });
         redrawAll();
       } else if (tool === 'line' || tool === 'rect') {
         redrawAll();
+        
+        const { color, size } = getCurrentConfig();
         ctx.save();
         ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
-        ctx.strokeStyle = colorPicker.value;
-        ctx.lineWidth = sizePicker.value;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = size;
         if (tool === 'line') {
           ctx.beginPath();
           ctx.moveTo(startX, startY);
@@ -210,56 +736,133 @@
     canvas.addEventListener('mouseup', (e) => {
       if (isPanning) {
         isPanning = false;
+        canvas.style.cursor = (tool === 'text') ? 'text' : (tool === 'pan') ? 'grab' : 'crosshair';
         return;
       }
       if (!isDrawing) return;
       isDrawing = false;
+      
       const pos = getTransformedCoords(e);
       endX = pos.x;
       endY = pos.y;
+
+      const { color, size } = getCurrentConfig();
+      const currentPaths = getCurrentPaths();
+
       if (tool === 'line') {
-        paths.push({
-          tool: 'line',
-          color: colorPicker.value,
-          size: sizePicker.value,
-          points: [
-            { x: startX, y: startY },
-            { x: endX, y: endY }
-          ]
-        });
+        currentPaths.push({ tool: 'line', color, size, points: [{ x: startX, y: startY }, { x: endX, y: endY }] });
       } else if (tool === 'rect') {
-        paths.push({
-          tool: 'rect',
-          color: colorPicker.value,
-          size: sizePicker.value,
-          rect: [startX, startY, endX - startX, endY - startY]
-        });
+        currentPaths.push({ tool: 'rect', color, size, rect: [startX, startY, endX - startX, endY - startY] });
       }
       redrawAll();
     });
-
+    
     canvas.addEventListener('contextmenu', e => e.preventDefault());
-
-    function saveAsPDF() {
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = canvas.width;
-      tempCanvas.height = canvas.height;
-      const tempCtx = tempCanvas.getContext('2d');
-      tempCtx.fillStyle = '#ffffff';
-      tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-      redrawAll(tempCtx, false);
-      const imgData = tempCanvas.toDataURL('image/png');
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] });
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save('whiteboard.pdf');
-    }
 
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      finalizeText();
+      updateToolUI();
       redrawAll();
     });
+
+    // --- PDF Save Function ---
+
+    function saveAsPDF() {
+      finalizeText();
+      saveCurrentPageSate();
+      
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px' });
+      pdf.deletePage(1); 
+      
+      // Create a temp canvas to measure text
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+
+      for (let i = 0; i < pages.length; i++) {
+        const pagePaths = pages[i].paths;
+        let contentWidth = 1920;
+        let contentHeight = 1080;
+        let minX = 0, minY = 0;
+        const padding = 20;
+
+        if (pagePaths.length > 0) {
+          minX = Infinity; minY = Infinity;
+          let maxX = -Infinity, maxY = -Infinity;
+          
+          for (const path of pagePaths) {
+            const halfSize = (path.size || 2) / 2; 
+            if (path.tool === 'pen' || path.tool === 'eraser' || path.tool === 'line') {
+              for (const p of path.points) {
+                minX = Math.min(minX, p.x - halfSize);
+                maxX = Math.max(maxX, p.x + halfSize);
+                minY = Math.min(minY, p.y - halfSize);
+                maxY = Math.max(maxY, p.y + halfSize);
+              }
+            } else if (path.tool === 'rect') {
+              const [x, y, w, h] = path.rect;
+              minX = Math.min(minX, x - halfSize, x + w - halfSize);
+              maxX = Math.max(maxX, x + halfSize, x + w + halfSize);
+              minY = Math.min(minY, y - halfSize, y + h - halfSize);
+              maxY = Math.max(maxY, y + halfSize, y + h + halfSize);
+            } else if (path.tool === 'text') {
+              // Set font on temp canvas to measure
+              tempCtx.font = `${path.size}px Roboto`;
+              const lines = path.text.split('\n');
+              const lineHeight = parseFloat(path.size) * 1.2;
+              const totalHeight = (lines.length - 1) * lineHeight + parseFloat(path.size);
+              let maxWidth = 0;
+              for (const line of lines) {
+                maxWidth = Math.max(maxWidth, tempCtx.measureText(line).width);
+              }
+              minX = Math.min(minX, path.x - halfSize);
+              maxX = Math.max(maxX, path.x + maxWidth + halfSize);
+              minY = Math.min(minY, path.y - halfSize);
+              maxY = Math.max(maxY, path.y + totalHeight + halfSize);
+            }
+          }
+          contentWidth = (maxX - minX) + (padding * 2);
+          contentHeight = (maxY - minY) + (padding * 2);
+        }
+
+        const orientation = contentWidth > contentHeight ? 'l' : 'p';
+        pdf.addPage([contentWidth, contentHeight], orientation);
+
+        if (pagePaths.length === 0) continue;
+
+        // Use the same temp canvas for drawing
+        tempCanvas.width = contentWidth;
+        tempCanvas.height = contentHeight;
+        
+        tempCtx.translate(-minX + padding, -minY + padding);
+        
+        const nonEraserPaths = pagePaths.filter(p => p.tool !== 'eraser');
+        drawPaths(tempCtx, nonEraserPaths);
+        
+        tempCtx.globalCompositeOperation = 'destination-out';
+        const eraserPaths = pagePaths.filter(p => p.tool === 'eraser');
+        drawPaths(tempCtx, eraserPaths);
+        
+        tempCtx.globalCompositeOperation = 'destination-over';
+        tempCtx.fillStyle = '#ffffff';
+        tempCtx.fillRect(minX - padding, minY - padding, contentWidth, contentHeight);
+
+        const imgData = tempCanvas.toDataURL('image/png');
+        pdf.addImage(imgData, 'PNG', 0, 0, contentWidth, contentHeight);
+        
+        // Clear transform for next page
+        tempCtx.setTransform(1, 0, 0, 1, 0, 0);
+      }
+      
+      pdf.save('whiteboard-pages.pdf');
+    }
+
+    // --- Initialize ---
+    setupToolOptions();
+    updatePageUI();
+    
   </script>
 </body>
 </html>
