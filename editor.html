@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kselis Page Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Cormorant+Infant:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         /* --- REFINED EDITOR UI STYLES --- */
@@ -18,98 +18,75 @@
             height: 100vh;
         }
 
-        /* Header matching notes/ml/index.html */
-        .editor-header {
-            background: linear-gradient(135deg, #4a4a4a, #2e2e2e);
-            color: #fff;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        /* Root title font style */
-        .editor-header h1 {
-            font-family: 'Cormorant Infant', serif;
-            margin: 0;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
-
-        /* Toolbar styled like the cards in notes/ml/index.html */
-        .toolbar-wrapper {
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
+        /* Single Unified Toolbar */
         .toolbar {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 15px 25px;
+            background: linear-gradient(135deg, #4a4a4a, #2e2e2e);
+            padding: 12px 20px;
             display: flex;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
-            width: 100%;
-            max-width: 1200px;
             align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        /* Standard buttons matching notes/ml/index.html links */
-        .toolbar button, .export-btn {
+        /* Toolbar Controls */
+        .toolbar button, .toolbar select {
             text-decoration: none;
-            color: #fff;
-            background: #333;
-            padding: 10px 15px;
+            color: #333;
+            background: #f9f9f9;
+            padding: 8px 12px;
             border: none;
             border-radius: 4px;
             font-family: 'Raleway', sans-serif;
             font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .toolbar button:hover, .export-btn:hover {
-            background: #555;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .toolbar select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Raleway', sans-serif;
-            background: #f9f9f9;
-            color: #333;
+            transition: background 0.3s ease, transform 0.2s ease;
             outline: none;
-            cursor: pointer;
+        }
+
+        .toolbar button:hover, .toolbar select:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        .toolbar .export-btn {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            margin-left: auto; /* Pushes export button to the right if space allows */
+        }
+
+        .toolbar .export-btn:hover {
+            background: #000;
         }
 
         .toolbar-divider {
             width: 1px;
-            height: 30px;
-            background-color: #ddd;
-            margin: 0 10px;
+            height: 24px;
+            background-color: #777;
+            margin: 0 4px;
         }
 
         /* --- WYSIWYG CONTENT AREA --- */
         .editor-container {
             flex-grow: 1;
-            padding: 10px 20px 40px 20px;
+            padding: 30px 15px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
         }
 
         #editor {
             background: #fff;
             width: 100%;
             max-width: 900px;
-            min-height: 600px;
+            min-height: 70vh;
             padding: 50px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -119,7 +96,10 @@
             line-height: 1.6;
         }
 
+        /* Editor Internal Styles */
         #editor h1, #editor h2 { color: #333; }
+        #editor a { color: #667eea; text-decoration: none; font-weight: bold; }
+        #editor a:hover { text-decoration: underline; }
         #editor code { background: #f4f4f4; padding: 2px 4px; }
         #editor .section { margin-bottom: 30px; }
         #editor .analogy { background: #e7f3fe; border-left: 4px solid #2196F3; padding: 10px; margin: 10px 0; display: block; }
@@ -128,45 +108,72 @@
         
         #editor table {
             border-collapse: collapse;
-            width: 80%;
+            width: 100%; /* Changed to 100% for better mobile fit */
             border: 1px solid #ddd;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin: 20px 0;
         }
-        #editor th, #editor td { padding: 5px; border: 1px solid #ddd; text-align: center; }
+        #editor th, #editor td { padding: 8px; border: 1px solid #ddd; text-align: center; }
         #editor th { background-color: #f9f9f9; font-weight: bold; }
-        
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 10px;
+                gap: 6px;
+                justify-content: flex-start;
+            }
+            .toolbar button, .toolbar select {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .toolbar .export-btn {
+                margin-left: 0;
+                width: 100%; /* Make export button full width on mobile for easy tapping */
+                text-align: center;
+                margin-top: 5px;
+            }
+            .toolbar-divider {
+                display: none; /* Hide dividers on mobile to save space */
+            }
+            .editor-container {
+                padding: 15px 10px;
+            }
+            #editor {
+                padding: 20px;
+            }
+            #editor table {
+                display: block;
+                overflow-x: auto; /* Enables horizontal scroll for tables on small screens */
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="editor-header">
-        <h1>Kselis Document Creator</h1>
+    <div class="toolbar">
+        <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
+            <option value="" disabled selected>Text Style</option>
+            <option value="H1">Title (H1)</option>
+            <option value="H2">Subtitle (H2)</option>
+            <option value="P">Paragraph (P)</option>
+        </select>
+        
+        <button onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button onclick="addLink()" title="Add Link">🔗 Link</button>
+        <button onclick="format('insertUnorderedList')" title="Bullet List">• List</button>
+        
+        <div class="toolbar-divider"></div>
+        
+        <button onclick="insertCustomBlock('section')">+ Section</button>
+        <button onclick="insertCustomBlock('analogy')">+ Analogy</button>
+        <button onclick="insertCustomBlock('example')">+ Example</button>
+        <button onclick="insertTable()">+ Table</button>
+        
         <button class="export-btn" onclick="exportHTML()">Save & Export HTML</button>
-    </div>
-
-    <div class="toolbar-wrapper">
-        <div class="toolbar">
-            <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
-                <option value="" disabled selected>Formatting</option>
-                <option value="H1">Title (H1)</option>
-                <option value="H2">Subtitle (H2)</option>
-                <option value="P">Paragraph (P)</option>
-            </select>
-            
-            <button onclick="format('bold')"><b>B</b></button>
-            <button onclick="format('italic')"><i>I</i></button>
-            <button onclick="format('insertUnorderedList')">Bullet List</button>
-            
-            <div class="toolbar-divider"></div>
-            
-            <button onclick="insertCustomBlock('section')">+ Section</button>
-            <button onclick="insertCustomBlock('analogy')">+ Analogy Box</button>
-            <button onclick="insertCustomBlock('example')">+ Example Box</button>
-            <button onclick="insertTable()">+ Table</button>
-        </div>
     </div>
 
     <div class="editor-container">
@@ -175,16 +182,41 @@
             <div class="section">
                 <h2>Introduction</h2>
                 <p>Start drafting your notes here...</p>
+                <ul>
+                    <li>Bullet point (Press <b>Tab</b> to nest)</li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
+        // Core text formatting
         function format(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor').focus();
         }
 
+        // Link insertion logic
+        function addLink() {
+            const url = prompt("Enter link URL (e.g., https://kselis.github.io):", "https://");
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        // Handle Tab key for nested bullet points
+        document.getElementById('editor').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault(); // Prevent default browser tab behavior
+                if (e.shiftKey) {
+                    document.execCommand('outdent', false, null); // Shift+Tab moves list item out
+                } else {
+                    document.execCommand('indent', false, null); // Tab nests list item in
+                }
+            }
+        });
+
+        // Insert custom structural divs matching style.css
         function insertCustomBlock(className) {
             const editor = document.getElementById('editor');
             editor.focus();
@@ -214,6 +246,7 @@
             }
         }
 
+        // Insert standard Kselis style table
         function insertTable() {
             const tableHTML = `
                 <table cellpadding="8" cellspacing="0">
@@ -224,6 +257,7 @@
             document.execCommand('insertHTML', false, tableHTML);
         }
 
+        // Export the written content into a downloadable HTML file
         function exportHTML() {
             const content = document.getElementById('editor').innerHTML;
             const fullHTML = `<!DOCTYPE html>
@@ -246,7 +280,7 @@ ${content}
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "kselis-note-draft.html";
+            a.download = "kselis-note.html";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
