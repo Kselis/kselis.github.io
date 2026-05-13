@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kselis Wiki Editor</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
@@ -18,12 +18,12 @@
             color: #333;
             display: flex;
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* Prevent body scroll, scroll editor instead */
         }
 
-        /* --- MINIMALIST SIDEBAR (Desktop) --- */
+        /* --- DESKTOP SIDEBAR --- */
         .sidebar {
-            width: 260px;
+            width: 280px;
             background-color: #f4f4f4;
             border-right: 1px solid #eaeaea;
             display: flex;
@@ -31,7 +31,17 @@
             padding: 24px 16px;
             box-sizing: border-box;
             z-index: 10;
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), bottom 0s;
+        }
+
+        /* Mobile specific visual indicator (hidden on desktop) */
+        .mobile-drag-handle {
+            display: none;
+            width: 40px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 0 auto 20px auto;
         }
 
         .sidebar-header {
@@ -44,10 +54,7 @@
             letter-spacing: 0.2px;
         }
 
-        .nav-section {
-            margin-bottom: 24px;
-        }
-
+        .nav-section { margin-bottom: 24px; }
         .nav-label {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -58,7 +65,7 @@
             padding: 0 8px;
         }
 
-        /* Clean, flat buttons with soft hover */
+        /* Flat buttons with soft hover */
         .tool-btn, .nav-link {
             background: transparent;
             border: none;
@@ -78,22 +85,16 @@
             text-decoration: none;
         }
 
-        .tool-btn:hover, .nav-link:hover {
-            background-color: #e8e8e8;
-            color: #111;
-        }
+        .tool-btn:hover, .nav-link:hover { background-color: #e8e8e8; color: #111; }
 
-        /* Icon Styling */
         .material-symbols-outlined {
-            font-size: 20px; /* Perfectly sized to match the 0.9rem text */
+            font-size: 20px; 
             color: #666;
             transition: color 0.2s;
         }
 
         .tool-btn:hover .material-symbols-outlined, 
-        .nav-link:hover .material-symbols-outlined {
-            color: #111;
-        }
+        .nav-link:hover .material-symbols-outlined { color: #111; }
 
         select.tool-btn {
             appearance: none;
@@ -103,15 +104,7 @@
             padding: 10px 12px;
         }
 
-        select.tool-btn:hover {
-            background: #fafafa;
-        }
-
-        .divider {
-            height: 1px;
-            background-color: #eaeaea;
-            margin: 16px 8px;
-        }
+        .divider { height: 1px; background-color: #eaeaea; margin: 16px 8px; }
 
         .export-btn {
             background-color: #222;
@@ -124,21 +117,13 @@
             font-size: 0.9rem;
             cursor: pointer;
             margin-top: auto;
-            text-align: center;
-            transition: background 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
         }
-
-        .export-btn:hover {
-            background-color: #444;
-        }
-
-        .export-btn .material-symbols-outlined {
-            color: #fff;
-        }
+        .export-btn:hover { background-color: #444; }
+        .export-btn .material-symbols-outlined { color: #fff; }
 
         /* --- THE EDITOR "PAPER" CANVAS --- */
         .editor-container {
@@ -164,33 +149,24 @@
             font-size: 1.05rem;
         }
 
-        /* Clean Editor Internal HTML Styles */
-        #editor h1 { font-family: 'Cormorant Infant', serif; font-size: 2.8rem; margin-top: 0; color: #111; }
-        #editor h2 { font-weight: 700; color: #222; margin-top: 1.5em; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;}
+        /* Reverted to standard Raleway headings matching Kselis default */
+        #editor h1 { font-family: 'Raleway', sans-serif; font-size: 2.4rem; font-weight: 700; color: #333; margin-top: 0; }
+        #editor h2 { font-family: 'Raleway', sans-serif; font-size: 1.6rem; font-weight: 700; color: #333; margin-top: 1.5em; border-bottom: 1px solid #eaeaea; padding-bottom: 8px;}
         #editor p { color: #333; }
-        #editor a { color: #667eea; text-decoration: none; border-bottom: 1px solid transparent; transition: border 0.2s; }
-        #editor a:hover { border-bottom: 1px solid #667eea; }
+        #editor a { color: #667eea; text-decoration: none; font-weight: bold; }
+        #editor a:hover { text-decoration: underline; }
         #editor code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #eb5757; }
         
         #editor .section { margin-bottom: 30px; }
-        #editor .analogy { background: #f8faff; border-left: 3px solid #667eea; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95rem;}
-        #editor .example { background: #fafafa; border: 1px solid #eaeaea; padding: 16px 20px; margin: 20px 0; border-radius: 8px; font-size: 0.95rem;}
+        #editor .analogy { background: #f8faff; border-left: 4px solid #667eea; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;}
+        #editor .example { background: #fafafa; border: 1px solid #eaeaea; padding: 16px 20px; margin: 20px 0; border-radius: 8px;}
         #editor pre { background: #f8f8f8; border: 1px solid #eaeaea; padding: 16px; border-radius: 8px; overflow-x: auto; }
         
-        #editor table {
-            border-collapse: collapse;
-            width: 100%;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 24px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
+        #editor table { border-collapse: collapse; width: 100%; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; margin: 24px 0; }
         #editor th, #editor td { padding: 12px 16px; border-bottom: 1px solid #eaeaea; text-align: left; }
         #editor th { background-color: #fafafa; font-weight: 600; color: #444; }
-        #editor tr:last-child td { border-bottom: none; }
 
-        /* --- MOBILE FAB & SLIDE-UP MENU --- */
+        /* --- MOBILE FAB & BOTTOM SHEET --- */
         .mobile-fab {
             display: none;
             position: fixed;
@@ -207,13 +183,10 @@
             cursor: pointer;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s;
+            transition: bottom 0.1s ease-out; /* Smooth transition when keyboard pops up */
         }
 
-        .mobile-fab .material-symbols-outlined {
-            color: #fff;
-            font-size: 28px;
-        }
+        .mobile-fab .material-symbols-outlined { color: #fff; font-size: 28px; }
 
         .menu-backdrop {
             display: none;
@@ -225,51 +198,35 @@
             transition: opacity 0.3s;
         }
 
-        /* --- RESPONSIVE DESIGN --- */
+        /* --- RESPONSIVE MOBILE VIEW --- */
         @media (max-width: 900px) {
+            .mobile-drag-handle { display: block; }
+            
+            /* The distinct Mobile Menu Bar (Bottom Sheet) */
             .sidebar {
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 70vh;
+                height: auto;
+                max-height: 75vh; 
                 border-right: none;
                 border-top: 1px solid #eaeaea;
                 border-radius: 20px 20px 0 0;
                 box-shadow: 0 -4px 24px rgba(0,0,0,0.1);
                 background: #fff;
                 transform: translateY(100%);
-                padding: 24px;
+                padding: 15px 24px 30px 24px;
                 z-index: 100;
                 overflow-y: auto;
             }
 
-            .sidebar.open {
-                transform: translateY(0);
-            }
+            .sidebar.open { transform: translateY(0); }
+            .menu-backdrop.open { display: block; opacity: 1; }
+            .mobile-fab { display: flex; }
 
-            .menu-backdrop.open {
-                display: block;
-                opacity: 1;
-            }
-
-            .mobile-fab {
-                display: flex;
-            }
-
-            .mobile-fab.open {
-                transform: rotate(45deg);
-                background: #e74c3c;
-            }
-
-            .editor-container {
-                padding: 16px;
-            }
-
-            #editor {
-                padding: 32px 24px;
-                min-height: calc(100vh - 64px);
-            }
+            .editor-container { padding: 16px; padding-bottom: 100px; } /* Buffer for floating button */
+            #editor { padding: 30px 20px; min-height: calc(100vh - 64px); }
         }
     </style>
 </head>
@@ -278,64 +235,41 @@
     <div class="menu-backdrop" id="menuBackdrop" onclick="toggleMenu()"></div>
 
     <nav class="sidebar" id="sidebarMenu">
-        <div class="sidebar-header">Kselis Notes</div>
-        
-        <div class="nav-section">
-            <a href="../../index.html" class="nav-link">
-                <span class="material-symbols-outlined">home</span> Home
-            </a>
-            <a href="../index.html" class="nav-link">
-                <span class="material-symbols-outlined">library_books</span> Notes Portal
-            </a>
-        </div>
-        
-        <div class="divider"></div>
+        <div class="mobile-drag-handle"></div> <div class="sidebar-header">Kselis Notes</div>
         
         <div class="nav-section">
             <div class="nav-label">Text Formatting</div>
-            <select id="formatBlock" class="tool-btn" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
-                <option value="" disabled selected>Turn into...</option>
-                <option value="H1">Heading 1</option>
-                <option value="H2">Heading 2</option>
-                <option value="P">Paragraph</option>
+            <select id="formatBlock" class="tool-btn" onchange="handleAction('format', 'formatBlock', this.value); this.selectedIndex=0;">
+                <option value="" disabled selected>Heading Style...</option>
+                <option value="H1">Main Heading (H1)</option>
+                <option value="H2">Subheading (H2)</option>
+                <option value="P">Standard Text (P)</option>
             </select>
-            <button class="tool-btn" onclick="format('bold')">
-                <span class="material-symbols-outlined">format_bold</span> Bold Text
-            </button>
-            <button class="tool-btn" onclick="format('italic')">
-                <span class="material-symbols-outlined">format_italic</span> Italic Text
-            </button>
-            <button class="tool-btn" onclick="addLink()">
-                <span class="material-symbols-outlined">link</span> Add Link
-            </button>
-            <button class="tool-btn" onclick="format('insertUnorderedList')">
-                <span class="material-symbols-outlined">format_list_bulleted</span> Bullet List
-            </button>
+            <button class="tool-btn" onclick="handleAction('format', 'bold')"><span class="material-symbols-outlined">format_bold</span> Bold Text</button>
+            <button class="tool-btn" onclick="handleAction('format', 'italic')"><span class="material-symbols-outlined">format_italic</span> Italic Text</button>
+            <button class="tool-btn" onclick="handleAction('link')"><span class="material-symbols-outlined">link</span> Add Link</button>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Lists & Indentation</div>
+            <button class="tool-btn" onclick="handleAction('format', 'insertUnorderedList')"><span class="material-symbols-outlined">format_list_bulleted</span> Bullet List</button>
+            <button class="tool-btn" onclick="handleAction('format', 'indent')"><span class="material-symbols-outlined">format_indent_increase</span> Indent (Nest List)</button>
+            <button class="tool-btn" onclick="handleAction('format', 'outdent')"><span class="material-symbols-outlined">format_indent_decrease</span> Outdent (Un-nest)</button>
         </div>
 
         <div class="nav-section">
             <div class="nav-label">Insert Blocks</div>
-            <button class="tool-btn" onclick="insertCustomBlock('section')">
-                <span class="material-symbols-outlined">view_agenda</span> Section Wrapper
-            </button>
-            <button class="tool-btn" onclick="insertCustomBlock('analogy')">
-                <span class="material-symbols-outlined">lightbulb</span> Analogy Box
-            </button>
-            <button class="tool-btn" onclick="insertCustomBlock('example')">
-                <span class="material-symbols-outlined">edit_note</span> Example Box
-            </button>
-            <button class="tool-btn" onclick="insertTable()">
-                <span class="material-symbols-outlined">table</span> Data Table
-            </button>
+            <button class="tool-btn" onclick="handleAction('insert', 'section')"><span class="material-symbols-outlined">view_agenda</span> Section Wrapper</button>
+            <button class="tool-btn" onclick="handleAction('insert', 'analogy')"><span class="material-symbols-outlined">lightbulb</span> Analogy Box</button>
+            <button class="tool-btn" onclick="handleAction('insert', 'example')"><span class="material-symbols-outlined">edit_note</span> Example Box</button>
+            <button class="tool-btn" onclick="handleAction('table')"><span class="material-symbols-outlined">table</span> Data Table</button>
         </div>
         
-        <button class="export-btn" onclick="exportHTML()">
-            <span class="material-symbols-outlined">save</span> Export Note
-        </button>
+        <button class="export-btn" onclick="handleAction('export')"><span class="material-symbols-outlined">save</span> Export Note</button>
     </nav>
 
     <button class="mobile-fab" id="fabToggle" onclick="toggleMenu()">
-        <span class="material-symbols-outlined">add</span>
+        <span class="material-symbols-outlined" id="fabIcon">add</span>
     </button>
 
     <div class="editor-container">
@@ -345,46 +279,74 @@
                 <h2>Introduction</h2>
                 <p>Start typing your content here...</p>
                 <ul>
-                    <li>Press <b>Tab</b> to indent list items.</li>
-                    <li>Press <b>Shift + Tab</b> to un-indent.</li>
+                    <li>Use the Indent tools on mobile, or the Tab key on PC.</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <script>
-        // Toggle Mobile Menu
+        // --- 1. Menu Toggling & Keyboard Adjustment ---
         function toggleMenu() {
             const sidebar = document.getElementById('sidebarMenu');
-            const fab = document.getElementById('fabToggle');
             const backdrop = document.getElementById('menuBackdrop');
-            const fabIcon = fab.querySelector('.material-symbols-outlined');
+            const fabIcon = document.getElementById('fabIcon');
             
             sidebar.classList.toggle('open');
-            fab.classList.toggle('open');
             backdrop.classList.toggle('open');
             
-            if(fab.classList.contains('open')) {
+            if(sidebar.classList.contains('open')) {
                 fabIcon.innerText = 'close';
             } else {
                 fabIcon.innerText = 'add';
             }
         }
 
-        // Core Text Formatting
-        function format(command, value = null) {
-            document.execCommand(command, false, value);
-            document.getElementById('editor').focus();
+        // Handle on-screen keyboard (Moves FAB up so it isn't blocked)
+        if (window.visualViewport) {
+            const initialHeight = window.innerHeight;
+            window.visualViewport.addEventListener('resize', () => {
+                const fab = document.getElementById('fabToggle');
+                const sidebar = document.getElementById('sidebarMenu');
+                
+                // Calculate height difference caused by keyboard
+                let keyboardOffset = initialHeight - window.visualViewport.height;
+                if (keyboardOffset < 0) keyboardOffset = 0;
+                
+                // Push button up above the keyboard dynamically
+                fab.style.bottom = `calc(24px + ${keyboardOffset}px)`;
+                
+                // Keep the menu attached to the keyboard if it is open
+                if (window.innerWidth <= 900) {
+                    sidebar.style.bottom = `${keyboardOffset}px`;
+                }
+            });
         }
 
-        function addLink() {
-            const url = prompt("Enter URL:", "https://");
-            if (url) {
-                document.execCommand('createLink', false, url);
+        // --- 2. Central Action Handler (Triggers Auto-Close) ---
+        function handleAction(type, arg1, arg2) {
+            // Execute requested function
+            if (type === 'format') document.execCommand(arg1, false, arg2);
+            if (type === 'link') {
+                const url = prompt("Enter URL:", "https://");
+                if (url) document.execCommand('createLink', false, url);
+            }
+            if (type === 'insert') insertCustomBlock(arg1);
+            if (type === 'table') insertTable();
+            if (type === 'export') exportHTML();
+            
+            document.getElementById('editor').focus();
+
+            // Auto-Close Menu on mobile after selecting an option
+            if (window.innerWidth <= 900) {
+                const sidebar = document.getElementById('sidebarMenu');
+                if (sidebar.classList.contains('open')) {
+                    toggleMenu();
+                }
             }
         }
 
-        // Indent logic for lists
+        // --- 3. Desktop Tab Key Support ---
         document.getElementById('editor').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault(); 
@@ -396,21 +358,14 @@
             }
         });
 
-        // Insert custom block elements
+        // --- 4. Structural HTML Logic ---
         function insertCustomBlock(className) {
-            const editor = document.getElementById('editor');
-            editor.focus();
-            
             const block = document.createElement('div');
             block.className = className;
             
-            if (className === 'section') {
-                block.innerHTML = '<h2>New Section</h2><p>Content goes here...</p><br>';
-            } else if (className === 'analogy') {
-                block.innerHTML = '<strong>Analogy:</strong> Replace this text.<br>';
-            } else if (className === 'example') {
-                block.innerHTML = '<strong>Example:</strong> Replace this text.<br>';
-            }
+            if (className === 'section') block.innerHTML = '<h2>New Section</h2><p>Content goes here...</p><br>';
+            else if (className === 'analogy') block.innerHTML = '<strong>Analogy:</strong> Replace this text.<br>';
+            else if (className === 'example') block.innerHTML = '<strong>Example:</strong> Replace this text.<br>';
 
             const selection = window.getSelection();
             if (selection.rangeCount > 0) {
@@ -422,42 +377,18 @@
                 selection.removeAllRanges();
                 selection.addRange(range);
             } else {
-                editor.appendChild(block);
+                document.getElementById('editor').appendChild(block);
             }
         }
 
-        // Insert Table
         function insertTable() {
-            const tableHTML = `
-                <table cellpadding="8" cellspacing="0">
-                    <thead><tr><th>Column 1</th><th>Column 2</th></tr></thead>
-                    <tbody>
-                        <tr><td>Data</td><td>Data</td></tr>
-                        <tr><td>Data</td><td>Data</td></tr>
-                    </tbody>
-                </table><br>
-            `;
+            const tableHTML = `<table cellpadding="8" cellspacing="0"><thead><tr><th>Column 1</th><th>Column 2</th></tr></thead><tbody><tr><td>Data</td><td>Data</td></tr><tr><td>Data</td><td>Data</td></tr></tbody></table><br>`;
             document.execCommand('insertHTML', false, tableHTML);
         }
 
-        // Export Functionality
         function exportHTML() {
             const content = document.getElementById('editor').innerHTML;
-            const fullHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="../../kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
-  <title>Kselis Note</title>
-</head>
-<body>
-${content}
-  <a class="button" id="print" onclick="window.print()">Save as PDF</a>
-</body>
-</html>`;
+            const fullHTML = `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">\n  <link rel="stylesheet" href="style.css">\n  <link rel="icon" href="../../kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">\n  <title>Kselis Note</title>\n</head>\n<body>\n${content}\n  <a class="button" id="print" onclick="window.print()">Save as PDF</a>\n</body>\n</html>`;
 
             const blob = new Blob([fullHTML], { type: "text/html" });
             const url = URL.createObjectURL(blob);
@@ -468,11 +399,6 @@ ${content}
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            // Close menu on mobile after clicking export
-            if(window.innerWidth <= 900 && document.getElementById('sidebarMenu').classList.contains('open')) {
-                toggleMenu();
-            }
         }
     </script>
 </body>
