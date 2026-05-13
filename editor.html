@@ -3,124 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kselis Wiki Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <title>Kselis Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CORE STYLES --- */
+        /* --- CORE STYLES & BACKGROUND --- */
         body {
             font-family: 'Raleway', sans-serif;
             margin: 0;
-            background: #f4f4f4;
+            /* Subtle background gradient to make the glassmorphism visible */
+            background: linear-gradient(135deg, #e0e0e0 0%, #f4f4f4 50%, #d9d9d9 100%);
             color: #333;
             display: flex;
-            flex-direction: column;
             height: 100vh;
+            overflow: hidden; /* Prevent body scroll, scroll editor instead */
         }
 
-        /* --- STICKY TOOLBAR WRAPPER (Desktop) --- */
-        .toolbar-wrapper {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #f4f4f4;
-            padding: 15px 20px;
-        }
-
-        /* --- LIGHT CARD MENU BAR (Desktop Style) --- */
-        .toolbar {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 12px 20px;
+        /* --- GLASSMORPHIC SIDEBAR (Desktop) --- */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            padding: 25px 20px;
+            box-sizing: border-box;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            max-width: 1000px;
-            margin: 0 auto;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+            
+            /* Glassmorphism Effect */
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* Toolbar Controls */
-        .toolbar button, .toolbar select {
+        /* Minimal Header */
+        .sidebar-header {
+            font-family: 'Cormorant Infant', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #222;
+            text-align: center;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .nav-links a {
             text-decoration: none;
-            color: #fff;
-            background: #333;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 4px;
+            color: #555;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 0 10px;
+        }
+
+        /* --- GLASSMORPHIC BUTTONS & TOOLS --- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            overflow-y: auto; /* Allow scrolling if window is short */
+            padding-bottom: 20px;
+        }
+
+        .tools-grid select, .tools-grid button, .export-btn {
+            /* Glassmorphic Button Base */
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            
+            color: #333;
+            padding: 10px;
+            border-radius: 8px;
             font-family: 'Raleway', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.2s ease;
             outline: none;
         }
 
-        .toolbar button:hover, .toolbar select:hover {
-            background: #555;
+        .tools-grid button:hover, .tools-grid select:hover {
+            background: rgba(255, 255, 255, 0.8);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
         }
 
-        .toolbar select {
-            background: #f9f9f9;
-            color: #333;
-            border: 1px solid #ddd;
+        .tools-grid select {
+            grid-column: span 2;
+            flex-direction: row;
         }
 
-        .toolbar select:hover {
-            background: #fff;
-        }
-
-        .toolbar-divider {
-            width: 1px;
-            height: 24px;
-            background-color: #ddd;
-            margin: 0 5px;
-        }
-
+        /* Make the Export Button pop slightly */
         .export-btn {
-            background: #667eea !important; /* Accent color matching Kselis styling */
-            margin-left: auto;
-            font-weight: bold;
+            grid-column: span 2;
+            background: rgba(102, 126, 234, 0.85); /* Accent color glass */
+            color: #fff;
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            padding: 12px;
         }
 
         .export-btn:hover {
-            background: #5a6fd1 !important;
+            background: rgba(102, 126, 234, 1);
         }
 
-        /* --- WYSIWYG CONTENT AREA --- */
+        .icon {
+            font-size: 1.1rem;
+            font-style: normal;
+        }
+
+        /* --- MAIN EDITOR CONTENT AREA --- */
         .editor-container {
             flex-grow: 1;
-            padding: 10px 20px 80px 20px; /* Extra bottom padding for mobile scrolling */
+            padding: 40px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            height: 100vh;
+            box-sizing: border-box;
         }
 
         #editor {
             background: #fff;
             width: 100%;
             max-width: 900px;
-            min-height: 70vh;
-            padding: 50px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-height: 80vh;
+            padding: 60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
             outline: none;
             line-height: 1.6;
         }
 
-        /* Editor Internal HTML Styles */
+        /* Editor Internal HTML Styles (Mirroring Kselis live styles) */
         #editor h1, #editor h2 { color: #333; }
         #editor a { color: #667eea; text-decoration: none; font-weight: bold; }
         #editor a:hover { text-decoration: underline; }
-        #editor code { background: #f4f4f4; padding: 2px 4px; }
+        #editor code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
         #editor .section { margin-bottom: 30px; }
-        #editor .analogy { background: #e7f3fe; border-left: 4px solid #2196F3; padding: 10px; margin: 10px 0; display: block; }
-        #editor .example { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin: 10px 0; display: block; }
-        #editor pre { background: #f4f4f4; border: 1px solid #ccc; padding: 10px; overflow-x: auto; }
+        #editor .analogy { background: #e7f3fe; border-left: 4px solid #2196F3; padding: 12px; margin: 15px 0; display: block; border-radius: 0 4px 4px 0;}
+        #editor .example { background: #f9f9f9; border: 1px solid #ddd; padding: 12px; margin: 15px 0; display: block; border-radius: 4px;}
+        #editor pre { background: #f4f4f4; border: 1px solid #ccc; padding: 15px; overflow-x: auto; border-radius: 4px;}
         
         #editor table {
             border-collapse: collapse;
@@ -131,10 +186,10 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin: 20px 0;
         }
-        #editor th, #editor td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+        #editor th, #editor td { padding: 10px; border: 1px solid #ddd; text-align: center; }
         #editor th { background-color: #f9f9f9; font-weight: bold; }
 
-        /* --- FLOATING ACTION BUTTON (Hidden on Desktop) --- */
+        /* --- MOBILE: FLOATING ACTION BUTTON --- */
         .fab-btn {
             display: none;
             position: fixed;
@@ -143,7 +198,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: #333;
+            background: #222;
             color: #fff;
             border: none;
             font-size: 28px;
@@ -157,70 +212,56 @@
         }
 
         .fab-btn.open {
-            transform: rotate(45deg); /* Turns the '+' into an 'x' */
+            transform: rotate(45deg);
             background: #e74c3c; 
         }
 
-        /* --- MOBILE RESPONSIVENESS (FAB MENU MODE) --- */
-        @media (max-width: 768px) {
-            .toolbar-wrapper {
-                padding: 0;
-                position: static; /* Remove sticky behavior so header is completely clean */
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
             }
 
             .fab-btn {
-                display: flex; /* Activate FAB on mobile */
+                display: flex; /* Activate FAB */
             }
 
-            /* Transform horizontal toolbar into a floating grid menu */
-            .toolbar {
+            /* Convert sidebar into a floating mobile menu */
+            .sidebar {
                 position: fixed;
-                bottom: 100px; /* Floats above the FAB */
-                right: 25px;
-                width: 260px;
-                background: #fff;
-                border-radius: 12px;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-                padding: 15px;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-                margin: 0;
+                bottom: 100px; /* Float above the FAB */
+                right: 20px;
+                width: 280px;
+                height: auto;
+                max-height: 70vh;
+                border-radius: 16px;
+                padding: 20px;
                 
-                /* Animation starting state */
+                /* Start hidden */
                 visibility: hidden;
                 opacity: 0;
                 transform: scale(0.8) translateY(30px);
                 transform-origin: bottom right;
-                z-index: 999;
             }
 
-            /* Animation open state */
-            .toolbar.open {
+            .sidebar.open {
                 visibility: visible;
                 opacity: 1;
                 transform: scale(1) translateY(0);
             }
 
-            /* Stretch select and export buttons across the whole grid */
-            .toolbar select, .export-btn {
-                grid-column: span 2;
+            .sidebar-header {
+                font-size: 1.5rem;
             }
 
-            .toolbar button, .toolbar select {
-                width: 100%;
-                text-align: center;
-                padding: 10px;
-                font-size: 0.85rem;
-                margin: 0;
-            }
-
-            .toolbar-divider {
-                display: none;
+            .editor-container {
+                padding: 15px;
+                height: 100vh; /* Full screen when sidebar is hidden */
             }
 
             #editor {
-                padding: 25px; /* Thinner margins for mobile screens */
+                padding: 30px 20px;
+                min-height: auto; /* Allow natural scrolling */
             }
 
             #editor table {
@@ -232,32 +273,57 @@
 </head>
 <body>
 
-    <div class="toolbar-wrapper">
-        <button class="fab-btn" id="fabToggle" onclick="toggleFab()">+</button>
+    <nav class="sidebar" id="sidebarMenu">
+        <div class="sidebar-header">Kselis Editor</div>
         
-        <div class="toolbar" id="mainToolbar">
+        <div class="nav-links">
+            <a href="../../index.html"><span class="icon">🏠</span> Home</a>
+            <a href="../index.html"><span class="icon">📚</span> ML Notes</a>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="tools-grid">
             <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
-                <option value="" disabled selected>Text Style</option>
+                <option value="" disabled selected>Formatting ▼</option>
                 <option value="H1">Title (H1)</option>
                 <option value="H2">Subtitle (H2)</option>
-                <option value="P">Paragraph (P)</option>
+                <option value="P">Paragraph</option>
             </select>
             
-            <button onclick="format('bold')" title="Bold"><b>B</b></button>
-            <button onclick="format('italic')" title="Italic"><i>I</i></button>
-            <button onclick="addLink()" title="Add Link">🔗 Link</button>
-            <button onclick="format('insertUnorderedList')" title="Bullet List">• List</button>
+            <button onclick="format('bold')">
+                <span class="icon"><b>B</b></span> Bold
+            </button>
+            <button onclick="format('italic')">
+                <span class="icon"><i>I</i></span> Italic
+            </button>
+            <button onclick="addLink()">
+                <span class="icon">🔗</span> Link
+            </button>
+            <button onclick="format('insertUnorderedList')">
+                <span class="icon">•</span> List
+            </button>
             
-            <div class="toolbar-divider"></div>
+            <button onclick="insertCustomBlock('section')">
+                <span class="icon">📑</span> Section
+            </button>
+            <button onclick="insertTable()">
+                <span class="icon">⊞</span> Table
+            </button>
+            <button onclick="insertCustomBlock('analogy')">
+                <span class="icon">💡</span> Analogy
+            </button>
+            <button onclick="insertCustomBlock('example')">
+                <span class="icon">📝</span> Example
+            </button>
             
-            <button onclick="insertCustomBlock('section')">+ Section</button>
-            <button onclick="insertTable()">+ Table</button>
-            <button onclick="insertCustomBlock('analogy')">+ Analogy</button>
-            <button onclick="insertCustomBlock('example')">+ Example</button>
-            
-            <button class="export-btn" onclick="exportHTML()">Save & Export HTML</button>
+            <button class="export-btn" onclick="exportHTML()">
+                <span class="icon" style="color:white;">💾</span> Save & Export
+            </button>
         </div>
-    </div>
+    </nav>
+
+    <button class="fab-btn" id="fabToggle" onclick="toggleFab()">+</button>
 
     <div class="editor-container">
         <div id="editor" contenteditable="true">
@@ -266,29 +332,28 @@
                 <h2>Introduction</h2>
                 <p>Start drafting your notes here...</p>
                 <ul>
-                    <li>Bullet point (Press <b>Tab</b> to nest inward, <b>Shift+Tab</b> to move back out)</li>
+                    <li>Press <b>Tab</b> to indent lists, and <b>Shift+Tab</b> to un-indent.</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <script>
-        // Toggle the Floating Action Button and Palette on Mobile
+        // Toggle the Mobile FAB Menu
         function toggleFab() {
-            const toolbar = document.getElementById('mainToolbar');
+            const sidebar = document.getElementById('sidebarMenu');
             const fab = document.getElementById('fabToggle');
-            
-            toolbar.classList.toggle('open');
+            sidebar.classList.toggle('open');
             fab.classList.toggle('open');
         }
 
-        // Core text formatting
+        // Core Text Formatting
         function format(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor').focus();
         }
 
-        // Link insertion logic
+        // Add Links
         function addLink() {
             const url = prompt("Enter link URL (e.g., https://kselis.github.io):", "https://");
             if (url) {
@@ -296,7 +361,7 @@
             }
         }
 
-        // Handle Tab key for nested bullet points
+        // Tab Key Logic for Lists
         document.getElementById('editor').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault(); 
@@ -308,7 +373,7 @@
             }
         });
 
-        // Insert custom structural divs matching your ml notes
+        // Insert Structural Divs
         function insertCustomBlock(className) {
             const editor = document.getElementById('editor');
             editor.focus();
@@ -338,7 +403,7 @@
             }
         }
 
-        // Insert standard Kselis style table
+        // Insert Table
         function insertTable() {
             const tableHTML = `
                 <table cellpadding="8" cellspacing="0">
@@ -349,7 +414,7 @@
             document.execCommand('insertHTML', false, tableHTML);
         }
 
-        // Export the written content into a downloadable HTML file
+        // Export functionality
         function exportHTML() {
             const content = document.getElementById('editor').innerHTML;
             const fullHTML = `<!DOCTYPE html>
@@ -378,8 +443,8 @@ ${content}
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Auto-close menu on mobile after saving
-            if(window.innerWidth <= 768) {
+            // Auto-close menu on mobile after save
+            if(window.innerWidth <= 900) {
                 toggleFab();
             }
         }
