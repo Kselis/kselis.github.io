@@ -3,133 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kselis Wiki Editor</title>
+    <title>Kselis Page Editor</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Cormorant+Infant:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- EDITOR UI STYLES (Based on Kselis Homepage Theme) --- */
+        /* --- REFINED EDITOR UI STYLES --- */
         body {
             font-family: 'Raleway', sans-serif;
             margin: 0;
-            background-color: #d9d9d9;
+            background: #f4f4f4;
+            color: #333;
             display: flex;
             flex-direction: column;
             height: 100vh;
         }
 
+        /* Header matching notes/ml/index.html */
         .editor-header {
-            background-color: #222222;
-            color: #d9d9d9;
-            padding: 15px 30px;
+            background: linear-gradient(135deg, #4a4a4a, #2e2e2e);
+            color: #fff;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
+        /* Root title font style */
         .editor-header h1 {
             font-family: 'Cormorant Infant', serif;
             margin: 0;
-            font-size: 32px;
+            font-size: 2.2rem;
+            font-weight: 700;
         }
 
-        .export-btn {
-            background-color: #d9d9d9;
-            color: #222222;
-            border: none;
-            padding: 10px 20px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .export-btn:hover {
-            background-color: #fff;
+        /* Toolbar styled like the cards in notes/ml/index.html */
+        .toolbar-wrapper {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         .toolbar {
-            background-color: #4b4b4b;
-            padding: 10px 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 15px 25px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
+            width: 100%;
+            max-width: 1200px;
+            align-items: center;
         }
 
-        .toolbar button, .toolbar select {
-            background-color: #d9d9d9;
-            color: #222222;
+        /* Standard buttons matching notes/ml/index.html links */
+        .toolbar button, .export-btn {
+            text-decoration: none;
+            color: #fff;
+            background: #333;
+            padding: 10px 15px;
             border: none;
-            padding: 8px 12px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
             border-radius: 4px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .toolbar button:hover {
-            background-color: #fff;
+        .toolbar button:hover, .export-btn:hover {
+            background: #555;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
+        .toolbar select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Raleway', sans-serif;
+            background: #f9f9f9;
+            color: #333;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 30px;
+            background-color: #ddd;
+            margin: 0 10px;
+        }
+
+        /* --- WYSIWYG CONTENT AREA --- */
         .editor-container {
             flex-grow: 1;
-            padding: 30px;
+            padding: 10px 20px 40px 20px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
         }
 
-        /* --- WYSIWYG CONTENT AREA (Based on notes/ml/style.css) --- */
         #editor {
-            background-color: #fff;
+            background: #fff;
             width: 100%;
             max-width: 900px;
-            padding: 40px;
+            min-height: 600px;
+            padding: 50px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             outline: none;
-            overflow-y: auto;
             
-            /* Imported rules from notes/ml/style.css */
+            /* Imported rules from notes/ml/style.css to ensure visual fidelity */
             line-height: 1.6;
         }
 
-        #editor h1, #editor h2 {
-            color: #333;
-        }
-
-        #editor code {
-            background: #f4f4f4;
-            padding: 2px 4px;
-        }
-
-        #editor .section {
-            margin-bottom: 30px;
-        }
-
-        #editor .analogy {
-            background: #e7f3fe;
-            border-left: 4px solid #2196F3;
-            padding: 10px;
-            margin: 10px 0;
-            display: block;
-        }
-
-        #editor .example {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            display: block;
-        }
-
-        #editor pre {
-            background: #f4f4f4;
-            border: 1px solid #ccc;
-            padding: 10px;
-            overflow-x: auto;
-        }
-
+        #editor h1, #editor h2 { color: #333; }
+        #editor code { background: #f4f4f4; padding: 2px 4px; }
+        #editor .section { margin-bottom: 30px; }
+        #editor .analogy { background: #e7f3fe; border-left: 4px solid #2196F3; padding: 10px; margin: 10px 0; display: block; }
+        #editor .example { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin: 10px 0; display: block; }
+        #editor pre { background: #f4f4f4; border: 1px solid #ccc; padding: 10px; overflow-x: auto; }
+        
         #editor table {
             border-collapse: collapse;
             width: 80%;
@@ -139,76 +135,69 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin: 20px 0;
         }
-
-        #editor th, #editor td {
-            padding: 5px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        #editor th {
-            background-color: #f9f9f9;
-            font-weight: bold;
-        }
+        #editor th, #editor td { padding: 5px; border: 1px solid #ddd; text-align: center; }
+        #editor th { background-color: #f9f9f9; font-weight: bold; }
+        
     </style>
 </head>
 <body>
 
     <div class="editor-header">
-        <h1>Kselis Notes Editor</h1>
-        <button class="export-btn" onclick="exportHTML()">Export to HTML</button>
+        <h1>Kselis Document Creator</h1>
+        <button class="export-btn" onclick="exportHTML()">Save & Export HTML</button>
     </div>
 
-    <div class="toolbar">
-        <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
-            <option value="" disabled selected>Paragraph Format</option>
-            <option value="H1">Main Heading (H1)</option>
-            <option value="H2">Sub Heading (H2)</option>
-            <option value="P">Paragraph (P)</option>
-        </select>
-        
-        <button onclick="format('bold')"><b>B</b></button>
-        <button onclick="format('italic')"><i>I</i></button>
-        <button onclick="format('insertUnorderedList')">Bullet List</button>
-        
-        <button onclick="insertCustomBlock('section')">Add Section</button>
-        <button onclick="insertCustomBlock('analogy')">Add Analogy Box</button>
-        <button onclick="insertCustomBlock('example')">Add Example Box</button>
-        <button onclick="insertTable()">Add Table</button>
+    <div class="toolbar-wrapper">
+        <div class="toolbar">
+            <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
+                <option value="" disabled selected>Formatting</option>
+                <option value="H1">Title (H1)</option>
+                <option value="H2">Subtitle (H2)</option>
+                <option value="P">Paragraph (P)</option>
+            </select>
+            
+            <button onclick="format('bold')"><b>B</b></button>
+            <button onclick="format('italic')"><i>I</i></button>
+            <button onclick="format('insertUnorderedList')">Bullet List</button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <button onclick="insertCustomBlock('section')">+ Section</button>
+            <button onclick="insertCustomBlock('analogy')">+ Analogy Box</button>
+            <button onclick="insertCustomBlock('example')">+ Example Box</button>
+            <button onclick="insertTable()">+ Table</button>
+        </div>
     </div>
 
     <div class="editor-container">
         <div id="editor" contenteditable="true">
-            <h1>New Machine Learning Note</h1>
+            <h1>New Kselis Note</h1>
             <div class="section">
-                <h2>Section Title</h2>
-                <p>Start typing your content here...</p>
+                <h2>Introduction</h2>
+                <p>Start drafting your notes here...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Basic text formatting
         function format(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor').focus();
         }
 
-        // Insert custom structural divs (like .section, .analogy)
         function insertCustomBlock(className) {
             const editor = document.getElementById('editor');
             editor.focus();
             
-            // Create the wrapper div with the specified class
             const block = document.createElement('div');
             block.className = className;
             
             if (className === 'section') {
                 block.innerHTML = '<h2>New Section</h2><p>Content goes here...</p><br>';
             } else if (className === 'analogy') {
-                block.innerHTML = '<strong>Analogy:</strong> Replace this text with your analogy.<br>';
+                block.innerHTML = '<strong>Analogy:</strong> Replace this text.<br>';
             } else if (className === 'example') {
-                block.innerHTML = '<strong>Example:</strong> Replace this text with your example.<br>';
+                block.innerHTML = '<strong>Example:</strong> Replace this text.<br>';
             }
 
             const selection = window.getSelection();
@@ -216,8 +205,6 @@
                 const range = selection.getRangeAt(0);
                 range.deleteContents();
                 range.insertNode(block);
-                
-                // Move cursor after the inserted block
                 range.setStartAfter(block);
                 range.setEndAfter(block);
                 selection.removeAllRanges();
@@ -227,32 +214,18 @@
             }
         }
 
-        // Insert standard Kselis style table
         function insertTable() {
             const tableHTML = `
                 <table cellpadding="8" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Header 1</th>
-                            <th>Header 2</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                        </tr>
-                    </tbody>
+                    <thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>
+                    <tbody><tr><td>Data 1</td><td>Data 2</td></tr></tbody>
                 </table><br>
             `;
             document.execCommand('insertHTML', false, tableHTML);
         }
 
-        // Export the written content into a downloadable HTML file
         function exportHTML() {
             const content = document.getElementById('editor').innerHTML;
-            
-            // Boilerplate matching your existing ML notes
             const fullHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -261,7 +234,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="../../kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
-  <title>Machine Learning Note</title>
+  <title>Kselis Note</title>
 </head>
 <body>
 ${content}
@@ -273,7 +246,7 @@ ${content}
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "ml-note-draft.html";
+            a.download = "kselis-note-draft.html";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
