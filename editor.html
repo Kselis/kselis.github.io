@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kselis Page Editor</title>
+    <title>Kselis Wiki Editor</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- REFINED EDITOR UI STYLES --- */
+        /* --- CORE STYLES --- */
         body {
             font-family: 'Raleway', sans-serif;
             margin: 0;
@@ -18,64 +18,83 @@
             height: 100vh;
         }
 
-        /* Single Unified Toolbar */
-        .toolbar {
-            background: linear-gradient(135deg, #4a4a4a, #2e2e2e);
-            padding: 12px 20px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
+        /* --- STICKY TOOLBAR WRAPPER --- */
+        .toolbar-wrapper {
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: #f4f4f4;
+            padding: 15px 20px;
+        }
+
+        /* --- LIGHT CARD MENU BAR (Early Style) --- */
+        .toolbar {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 12px 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
         }
 
         /* Toolbar Controls */
         .toolbar button, .toolbar select {
             text-decoration: none;
-            color: #333;
-            background: #f9f9f9;
+            color: #fff;
+            background: #333;
             padding: 8px 12px;
             border: none;
             border-radius: 4px;
             font-family: 'Raleway', sans-serif;
             font-size: 0.9rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             outline: none;
         }
 
         .toolbar button:hover, .toolbar select:hover {
-            background: #fff;
+            background: #555;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        .toolbar .export-btn {
-            background: #222;
-            color: #fff;
-            border: 1px solid #444;
-            margin-left: auto; /* Pushes export button to the right if space allows */
+        .toolbar select {
+            background: #f9f9f9;
+            color: #333;
+            border: 1px solid #ddd;
         }
 
-        .toolbar .export-btn:hover {
-            background: #000;
+        .toolbar select:hover {
+            background: #fff;
         }
 
         .toolbar-divider {
             width: 1px;
             height: 24px;
-            background-color: #777;
-            margin: 0 4px;
+            background-color: #ddd;
+            margin: 0 5px;
+        }
+
+        /* Push Export button to the right side */
+        .export-btn {
+            background: #667eea !important; /* Accent color matching Kselis footer links */
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background: #5a6fd1 !important;
         }
 
         /* --- WYSIWYG CONTENT AREA --- */
         .editor-container {
             flex-grow: 1;
-            padding: 30px 15px;
+            padding: 10px 20px 40px 20px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
@@ -91,8 +110,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             outline: none;
-            
-            /* Imported rules from notes/ml/style.css to ensure visual fidelity */
             line-height: 1.6;
         }
 
@@ -108,7 +125,7 @@
         
         #editor table {
             border-collapse: collapse;
-            width: 100%; /* Changed to 100% for better mobile fit */
+            width: 100%;
             border: 1px solid #ddd;
             border-radius: 8px;
             overflow: hidden;
@@ -118,62 +135,88 @@
         #editor th, #editor td { padding: 8px; border: 1px solid #ddd; text-align: center; }
         #editor th { background-color: #f9f9f9; font-weight: bold; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE RESPONSIVENESS & MENU TOGGLE --- */
+        .mobile-toggle-btn {
+            display: none;
+            width: 100%;
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
-            .toolbar {
+            .toolbar-wrapper {
                 padding: 10px;
-                gap: 6px;
-                justify-content: flex-start;
+            }
+            .mobile-toggle-btn {
+                display: block; /* Show the toggle button on mobile */
+            }
+            .toolbar {
+                display: none; /* Hide the main toolbar by default */
+                flex-direction: column;
+                align-items: stretch;
+                margin-top: 10px;
+                padding: 15px;
+            }
+            .toolbar.open {
+                display: flex; /* Class added via JS to reveal the menu */
             }
             .toolbar button, .toolbar select {
-                padding: 6px 10px;
-                font-size: 0.8rem;
+                width: 100%;
+                text-align: center;
             }
             .toolbar .export-btn {
                 margin-left: 0;
-                width: 100%; /* Make export button full width on mobile for easy tapping */
-                text-align: center;
-                margin-top: 5px;
+                margin-top: 10px;
             }
             .toolbar-divider {
-                display: none; /* Hide dividers on mobile to save space */
-            }
-            .editor-container {
-                padding: 15px 10px;
+                display: none;
             }
             #editor {
-                padding: 20px;
+                padding: 25px; /* Less padding for mobile screens */
             }
             #editor table {
                 display: block;
-                overflow-x: auto; /* Enables horizontal scroll for tables on small screens */
+                overflow-x: auto;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="toolbar">
-        <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
-            <option value="" disabled selected>Text Style</option>
-            <option value="H1">Title (H1)</option>
-            <option value="H2">Subtitle (H2)</option>
-            <option value="P">Paragraph (P)</option>
-        </select>
+    <div class="toolbar-wrapper">
+        <button class="mobile-toggle-btn" id="menuToggle" onclick="toggleMenu()">☰ Menu</button>
         
-        <button onclick="format('bold')" title="Bold"><b>B</b></button>
-        <button onclick="format('italic')" title="Italic"><i>I</i></button>
-        <button onclick="addLink()" title="Add Link">🔗 Link</button>
-        <button onclick="format('insertUnorderedList')" title="Bullet List">• List</button>
-        
-        <div class="toolbar-divider"></div>
-        
-        <button onclick="insertCustomBlock('section')">+ Section</button>
-        <button onclick="insertCustomBlock('analogy')">+ Analogy</button>
-        <button onclick="insertCustomBlock('example')">+ Example</button>
-        <button onclick="insertTable()">+ Table</button>
-        
-        <button class="export-btn" onclick="exportHTML()">Save & Export HTML</button>
+        <div class="toolbar" id="mainToolbar">
+            <select id="formatBlock" onchange="format('formatBlock', this.value); this.selectedIndex=0;">
+                <option value="" disabled selected>Text Style</option>
+                <option value="H1">Title (H1)</option>
+                <option value="H2">Subtitle (H2)</option>
+                <option value="P">Paragraph (P)</option>
+            </select>
+            
+            <button onclick="format('bold')" title="Bold"><b>B</b></button>
+            <button onclick="format('italic')" title="Italic"><i>I</i></button>
+            <button onclick="addLink()" title="Add Link">🔗 Link</button>
+            <button onclick="format('insertUnorderedList')" title="Bullet List">• List</button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <button onclick="insertCustomBlock('section')">+ Section</button>
+            <button onclick="insertCustomBlock('analogy')">+ Analogy</button>
+            <button onclick="insertCustomBlock('example')">+ Example</button>
+            <button onclick="insertTable()">+ Table</button>
+            
+            <button class="export-btn" onclick="exportHTML()">Save & Export HTML</button>
+        </div>
     </div>
 
     <div class="editor-container">
@@ -190,6 +233,19 @@
     </div>
 
     <script>
+        // Toggle Menu for Mobile View
+        function toggleMenu() {
+            const toolbar = document.getElementById('mainToolbar');
+            const toggleBtn = document.getElementById('menuToggle');
+            toolbar.classList.toggle('open');
+            
+            if (toolbar.classList.contains('open')) {
+                toggleBtn.innerHTML = '✖ Close Menu';
+            } else {
+                toggleBtn.innerHTML = '☰ Menu';
+            }
+        }
+
         // Core text formatting
         function format(command, value = null) {
             document.execCommand(command, false, value);
@@ -207,16 +263,16 @@
         // Handle Tab key for nested bullet points
         document.getElementById('editor').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
-                e.preventDefault(); // Prevent default browser tab behavior
+                e.preventDefault(); 
                 if (e.shiftKey) {
-                    document.execCommand('outdent', false, null); // Shift+Tab moves list item out
+                    document.execCommand('outdent', false, null); 
                 } else {
-                    document.execCommand('indent', false, null); // Tab nests list item in
+                    document.execCommand('indent', false, null); 
                 }
             }
         });
 
-        // Insert custom structural divs matching style.css
+        // Insert custom structural divs
         function insertCustomBlock(className) {
             const editor = document.getElementById('editor');
             editor.focus();
