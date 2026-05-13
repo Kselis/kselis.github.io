@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kselis Wiki Editor</title>
+    <title>Kselis Reable Content Editor</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
     
@@ -21,7 +21,7 @@
             overflow: hidden; /* Prevent body scroll, scroll editor instead */
         }
 
-        /* --- DESKTOP SIDEBAR --- */
+        /* --- DESKTOP SIDEBAR (Restored Design) --- */
         .sidebar {
             width: 280px;
             background-color: #f4f4f4;
@@ -31,6 +31,7 @@
             padding: 24px 16px;
             box-sizing: border-box;
             z-index: 100;
+            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -155,13 +156,13 @@
         #editor pre { background: #f8f8f8; border: 1px solid #eaeaea; padding: 16px; border-radius: 8px; overflow-x: auto; }
         
         #editor table { border-collapse: collapse; width: 100%; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; margin: 24px 0; }
-        #editor th, #editor td { padding: 12px 16px; border-bottom: 1px solid #eaeaea; text-align: left; }
+        #editor th, #editor td { padding: 12px 16px; border: 1px solid #eaeaea; text-align: left; min-width: 50px; }
         #editor th { background-color: #fafafa; font-weight: 600; color: #444; }
 
         /* --- MOBILE CUSTOM TOOLTIP --- */
         .mobile-tooltip {
             position: fixed;
-            bottom: 75px; /* Sits right above the mobile toolbar */
+            top: 75px; /* Sits right below the top toolbar */
             left: 50%;
             transform: translateX(-50%);
             background: rgba(30, 30, 30, 0.95);
@@ -179,34 +180,34 @@
         }
         .mobile-tooltip.visible { opacity: 1; }
 
-        /* --- RESPONSIVE MOBILE VIEW (HORIZONTAL TOOLBAR) --- */
+        /* --- RESPONSIVE MOBILE VIEW (TOP HORIZONTAL TOOLBAR) --- */
         @media (max-width: 900px) {
             body { flex-direction: column; }
             
-            /* Transform Sidebar into Horizontal Scrollable Bar */
+            /* Transform Sidebar into Horizontal Scrollable Bar at the TOP */
             .sidebar {
                 position: fixed;
-                bottom: 0;
+                top: 0;
                 left: 0;
                 width: 100%;
                 height: 60px;
                 flex-direction: row;
                 align-items: center;
                 border-right: none;
-                border-top: 1px solid #eaeaea;
+                border-bottom: 1px solid #eaeaea;
                 background: #fff;
                 padding: 0 10px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 white-space: nowrap;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             }
 
             /* Hide Scrollbar for cleaner look */
             .sidebar::-webkit-scrollbar { display: none; }
             .sidebar { -ms-overflow-style: none; scrollbar-width: none; }
 
-            /* Hide Text Elements */
+            /* Hide Text Elements so only icons remain */
             .sidebar-header, .nav-label, .btn-text { display: none !important; }
 
             .nav-section {
@@ -241,7 +242,7 @@
 
             .editor-container { 
                 padding: 16px; 
-                padding-bottom: 80px; /* Buffer for bottom bar */
+                padding-top: 76px; /* Buffer for top bar */
             } 
             #editor { 
                 padding: 30px 20px; 
@@ -304,7 +305,7 @@
         <div class="divider"></div>
 
         <div class="nav-section">
-            <div class="nav-label">Insert Blocks</div>
+            <div class="nav-label">Insert Blocks & Tables</div>
             <button class="tool-btn" title="Add Section" onclick="handleAction('insert', 'section')">
                 <span class="material-symbols-outlined">view_agenda</span> 
                 <span class="btn-text">Section Wrapper</span>
@@ -317,9 +318,20 @@
                 <span class="material-symbols-outlined">edit_note</span> 
                 <span class="btn-text">Example Box</span>
             </button>
-            <button class="tool-btn" title="Add Table" onclick="handleAction('table')">
+            
+            <div class="divider"></div>
+            
+            <button class="tool-btn" title="Create New Table" onclick="handleAction('table')">
                 <span class="material-symbols-outlined">table</span> 
-                <span class="btn-text">Data Table</span>
+                <span class="btn-text">Insert Table</span>
+            </button>
+            <button class="tool-btn" title="Add Row to Table" onclick="handleAction('addRow')">
+                <span class="material-symbols-outlined">table_rows</span> 
+                <span class="btn-text">Add Row</span>
+            </button>
+            <button class="tool-btn" title="Add Column to Table" onclick="handleAction('addColumn')">
+                <span class="material-symbols-outlined">view_column</span> 
+                <span class="btn-text">Add Column</span>
             </button>
         </div>
         
@@ -336,7 +348,7 @@
                 <h2>Introduction</h2>
                 <p>Start typing your content here...</p>
                 <ul>
-                    <li>Use the Indent tools on the bottom bar for nested lists.</li>
+                    <li>Use the Indent tools on the top bar for nested lists.</li>
                     <li>Hold down any tool icon on mobile to see its name.</li>
                 </ul>
             </div>
@@ -346,24 +358,7 @@
     <div class="mobile-tooltip" id="customTooltip">Tool Name</div>
 
     <script>
-        // --- 1. Keyboard Aware Bottom Bar ---
-        if (window.visualViewport) {
-            const initialHeight = window.innerHeight;
-            window.visualViewport.addEventListener('resize', () => {
-                const sidebar = document.getElementById('sidebarMenu');
-                
-                // Only shift if we are in mobile view (width <= 900)
-                if (window.innerWidth <= 900) {
-                    let keyboardOffset = initialHeight - window.visualViewport.height;
-                    if (keyboardOffset < 0) keyboardOffset = 0;
-                    
-                    // Push the toolbar up dynamically to sit on the keyboard
-                    sidebar.style.bottom = `${keyboardOffset}px`;
-                }
-            });
-        }
-
-        // --- 2. Mobile "Hold to Learn" Tooltips ---
+        // --- 1. Mobile "Hold to Learn" Tooltips ---
         const tooltipEl = document.getElementById('customTooltip');
         let pressTimer;
 
@@ -389,7 +384,7 @@
             tooltipEl.classList.remove('visible');
         }
 
-        // --- 3. Central Action Handler ---
+        // --- 2. Central Action Handler ---
         function handleAction(type, arg1, arg2) {
             if (type === 'format') document.execCommand(arg1, false, arg2);
             if (type === 'link') {
@@ -398,12 +393,14 @@
             }
             if (type === 'insert') insertCustomBlock(arg1);
             if (type === 'table') insertTable();
+            if (type === 'addRow') addTableRow();
+            if (type === 'addColumn') addTableColumn();
             if (type === 'export') exportHTML();
             
             document.getElementById('editor').focus();
         }
 
-        // --- 4. Desktop Tab Key Support ---
+        // --- 3. Desktop Tab Key Support ---
         document.getElementById('editor').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault(); 
@@ -415,7 +412,7 @@
             }
         });
 
-        // --- 5. Structural HTML Logic ---
+        // --- 4. Structural HTML Logic ---
         function insertCustomBlock(className) {
             const block = document.createElement('div');
             block.className = className;
@@ -438,9 +435,55 @@
             }
         }
 
+        // --- 5. Table Management ---
         function insertTable() {
-            const tableHTML = `<table cellpadding="8" cellspacing="0"><thead><tr><th>Column 1</th><th>Column 2</th></tr></thead><tbody><tr><td>Data</td><td>Data</td></tr><tr><td>Data</td><td>Data</td></tr></tbody></table><br>`;
+            const tableHTML = `<table cellpadding="8" cellspacing="0"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Data</td><td>Data</td></tr><tr><td>Data</td><td>Data</td></tr></tbody></table><br>`;
             document.execCommand('insertHTML', false, tableHTML);
+        }
+
+        function addTableRow() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            
+            // Find the closest table row from where the cursor is
+            let node = selection.getRangeAt(0).startContainer;
+            while (node && node.nodeName !== 'TR' && node.nodeName !== 'TABLE' && node !== document.body) {
+                node = node.parentNode;
+            }
+            
+            if (node && node.nodeName === 'TR') {
+                const newRow = node.cloneNode(true);
+                // Clear the text inside the new cloned row
+                Array.from(newRow.cells).forEach(cell => cell.innerHTML = 'Data');
+                node.parentNode.insertBefore(newRow, node.nextSibling);
+            } else {
+                alert("Please tap inside an existing table row first.");
+            }
+        }
+
+        function addTableColumn() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+
+            // Find the closest table cell from where the cursor is
+            let node = selection.getRangeAt(0).startContainer;
+            while (node && node.nodeName !== 'TD' && node.nodeName !== 'TH' && node !== document.body) {
+                node = node.parentNode;
+            }
+
+            if (node && (node.nodeName === 'TD' || node.nodeName === 'TH')) {
+                const cellIndex = node.cellIndex;
+                const table = node.closest('table');
+                
+                // Add a new cell to the exact index in every row of the table
+                Array.from(table.rows).forEach(row => {
+                    const newCell = row.cells[cellIndex].cloneNode(true);
+                    newCell.innerHTML = row.parentNode.tagName === 'THEAD' ? 'New Header' : 'New Data';
+                    row.insertBefore(newCell, row.cells[cellIndex].nextSibling);
+                });
+            } else {
+                alert("Please tap inside an existing table column first.");
+            }
         }
 
         function exportHTML() {
