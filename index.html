@@ -1,43 +1,294 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta property="og:title" content="Kselis Institute" />
-        <meta property="og:description" content="Kselis is a team of individuals working together to reshape education — not just by building something new, but by improving what already exists. We’re not just another ed-tech brand. We’re a growing community that believes learning should be driven by curiosity, not compulsion." />
-        <meta property="og:image" content="kselis_logo/kselis_meta.png" />
-        <meta property="og:url" content="https://kselis.github.io" />
-        <meta property="og:type" content="website" />
-        <title>Kselis | Homepage</title>
-        <link rel="icon" href="kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <section class="header">
-            <div class = "logo">
-                <img src="kselis_logo/kselis_logo_nobg_light.png" class = "logo_img">
-            </div>
-            <div class = "texts_sections">
-                <div class = "title">
-                    Welcome to Kselis
-                </div>
-                <div class = "text_header">
-                    Our site is currently under maintenance, and our main domain is parked on the web. We're working hard to get everything up and running. We'll be live very soon—stay tuned!
-                </div>
-            </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Kselis Institute" />
+    <meta property="og:description" content="Kselis is a team of individuals working together to reshape education — not just by building something new, but by improving what already exists. We’re not just another ed-tech brand. We’re a growing community that believes learning should be driven by curiosity, not compulsion." />
+    <meta property="og:image" content="kselis_logo/kselis_meta.png" />
+    <meta property="og:url" content="https://kselis.github.io" />
+    <meta property="og:type" content="website" />
+    <title>Kselis | Homepage</title>
+    
+    <link rel="icon" href="kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <style>
+        /* --- CORE STYLES & VARIABLES --- */
+        :root {
+            --bg-color: #fafafa;
+            --card-bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #555555;
+            --border-color: #eaeaea;
+            --accent: #667eea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo img {
+            height: 45px; 
+            object-fit: contain;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* --- MAIN CONTAINER --- */
+        main {
+            flex-grow: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            width: 100%;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Infant', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 24px 35px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        /* --- TOOLS & PORTAL GRID --- */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 70px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px 30px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.01);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            border-color: #d1d5db;
+        }
+
+        .card .icon-wrapper {
+            background: var(--bg-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .about-section h2 {
+            font-family: 'Cormorant Infant', serif;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .about-section p {
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .about-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .about-section { padding: 40px 25px; }
+            nav { padding: 15px 20px; }
+            .hero p { padding: 20px; text-align: left;}
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="kselis_logo/kselis_logo_nobg_light.png" alt="Kselis Logo">
+        </div>
+        <div class="nav-links">
+            <a href="contact.html">
+                <span class="material-symbols-outlined" style="font-size: 20px;">mail</span> Contact
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to Kselis</h1>
+            <p>Our site is currently under maintenance, and our main domain is parked on the web. We're working hard to get everything up and running. We'll be live very soon—stay tuned!</p>
         </section>
-        <section class="about_us">
-            <div class="abt_title">
-                About Kselis
-            </div>
-            <div class="text_abt">
-                Welcome to Kselis—an initiative built by a team of passionate individuals who genuinely care about helping students discover their potential. Our vision is simple: to be your friend and mentor, guiding you through the exciting and sometimes challenging phases of learning and life.<br><br>
-                For junior students, we aim to make education fun, engaging, and something they look forward to. We believe in creating a space where curiosity thrives, and learning becomes an adventure.<br><br>
-                For senior students, facing exams, college challenges, or career decisions, we’re here to play a meaningful role in their journey. From skill-building to exam prep, we’re all about providing the right support when it’s needed the most.<br><br>
-                Kselis isn’t just an organization—it’s a community that believes in empowering students to chase their passions and achieve their goals.<br>Join us as we build something truly special together!
-            </div>
+
+        <section class="portal-grid">
+            <a href="notes/index.html" class="card">
+                <div class="icon-wrapper">
+                    <span class="material-symbols-outlined">library_books</span>
+                </div>
+                <h3>Notes Portal</h3>
+                <p>Access structured learning materials, curated notes, and the machine learning syllabus.</p>
+            </a>
+
+            <a href="board/index.html" class="card">
+                <div class="icon-wrapper">
+                    <span class="material-symbols-outlined">draw</span>
+                </div>
+                <h3>Interactive Board</h3>
+                <p>Use our clean, feature-rich whiteboard for drawing, mind-mapping, and brainstorming ideas.</p>
+            </a>
+
+            <a href="campfire.html" class="card">
+                <div class="icon-wrapper">
+                    <span class="material-symbols-outlined">local_fire_department</span>
+                </div>
+                <h3>Campfire</h3>
+                <p>Join the discussion, read the latest updates, and connect with the growing Kselis community.</p>
+            </a>
         </section>
-        <footer style="text-align: center; padding: 10px;">
-            &copy; 2024 Kselis Institute. All rights reserved | <a href="mailto:kselis.institute@gmail.com">mail us</a>
-        </footer>
-    </body>
+
+        <section class="about-section">
+            <h2>About Kselis</h2>
+            <p>
+                Welcome to Kselis—an initiative built by a team of passionate individuals who genuinely care about helping students discover their potential. Our vision is simple: to be your friend and mentor, guiding you through the exciting and sometimes challenging phases of learning and life.
+            </p>
+            <p>
+                For junior students, we aim to make education fun, engaging, and something they look forward to. We believe in creating a space where curiosity thrives, and learning becomes an adventure.
+            </p>
+            <p>
+                For senior students facing exams, college challenges, or career decisions, we’re here to play a meaningful role in their journey. From skill-building to exam prep, we’re all about providing the right support when it’s needed the most.
+            </p>
+            <p>
+                Kselis isn’t just an organization—it’s a community that believes in empowering students to chase their passions and achieve their goals.<br><br><strong>Join us as we build something truly special together!</strong>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2024 Kselis Institute. All rights reserved | <a href="mailto:kselis.institute@gmail.com">Mail Us</a>
+    </footer>
+
+</body>
 </html>
