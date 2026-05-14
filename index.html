@@ -56,9 +56,24 @@
             z-index: 100;
         }
 
-        .logo img {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Space between logo and text */
+            text-decoration: none;
+        }
+
+        .logo-container img {
             height: 45px; 
             object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            letter-spacing: 1px;
         }
 
         .nav-links a {
@@ -221,15 +236,17 @@
             .about-section { padding: 40px 25px; }
             nav { padding: 15px 20px; }
             .hero p { padding: 20px; text-align: left;}
+            .logo-text { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">
+        <a href="index.html" class="logo-container">
             <img src="kselis_logo/kselis_logo_nobg_light.png" alt="Kselis Logo">
-        </div>
+            <span class="logo-text">KSELIS</span>
+        </a>
         <div class="nav-links">
             <a href="contact.html">
                 <span class="material-symbols-outlined" style="font-size: 20px;">mail</span> Contact
@@ -244,7 +261,7 @@
         </section>
 
         <section class="portal-grid">
-            <a href="notes/index.html" class="card">
+            <a href="notes/ml/index.html" class="card">
                 <div class="icon-wrapper">
                     <span class="material-symbols-outlined">library_books</span>
                 </div>
