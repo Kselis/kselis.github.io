@@ -258,20 +258,23 @@
                 <p>Have a question or want to work together? Fill out the form below and we'll get back to you shortly.</p>
             </div>
 
-            <form id="kselisForm">
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted){ window.location='success.html'; }"></iframe>
+
+            <form id="kselisForm" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSdawQ9R7LDjfJTKBWSz93LIz4iEB6e9as5Mhx6fFMiwr7I_mg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+                
                 <div class="input-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    <input type="text" id="name" name="entry.1325372576" placeholder="Rasputin" required>
                 </div>
                 
                 <div class="input-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    <input type="email" id="email" name="entry.490756582" placeholder="Rasputin@rocks.com" required>
                 </div>
                 
                 <div class="input-group">
                     <label for="message">Your Message</label>
-                    <textarea id="message" name="message" placeholder="How can we help you today?" required></textarea>
+                    <textarea id="message" name="entry.488481316" placeholder="How can we help you today?" required></textarea>
                 </div>
                 
                 <button type="submit">
@@ -286,44 +289,17 @@
     </footer>
 
     <script>
+        // Global variable to track if the form was submitted
+        var submitted = false;
+
         const form = document.getElementById('kselisForm');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Change button to show loading state
+        form.addEventListener('submit', function() {
+            // Change button to show loading state while the hidden iframe processes the submission
             const submitBtn = form.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
             submitBtn.innerHTML = 'Sending... <span class="material-symbols-outlined" style="font-size: 20px;">hourglass_empty</span>';
             submitBtn.style.opacity = '0.8';
             submitBtn.style.pointerEvents = 'none';
-
-            const data = {
-                name: form.name.value,
-                email: form.email.value,
-                message: form.message.value
-            };
-
-            // Note: Keep your SCRIPT_URL placeholder here or replace it with your actual backend endpoint
-            fetch("SCRIPT_URL", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === "success") {
-                    window.location.href = "success.html";
-                } else {
-                    window.location.href = "error.html";
-                }
-            })
-            .catch(error => {
-                // Failsafe redirect
-                window.location.href = "error.html";
-            });
         });
     </script>
 </body>
