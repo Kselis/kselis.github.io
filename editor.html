@@ -335,7 +335,14 @@
             </button>
         </div>
         
-        <button class="export-btn" title="Save & Export" onclick="handleAction('export')">
+        <div class="divider"></div>
+
+        <button class="tool-btn" title="Clear Notes" onclick="clearNotes()" style="color: #c62828;">
+            <span class="material-symbols-outlined" style="color: #c62828;">delete_sweep</span> 
+            <span class="btn-text">Clear Notes</span>
+        </button>
+
+        <button class="export-btn" title="Save & Export" onclick="handleAction('export')" style="margin-top: 15px;">
             <span class="material-symbols-outlined">save</span> 
             <span class="btn-text">Export Note</span>
         </button>
@@ -499,6 +506,43 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        // --- 6. LocalStorage Auto-Save ---
+        const editorElement = document.getElementById('editor');
+
+        // Load saved notes when the page opens
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedNotes = localStorage.getItem('kselis_notes_state');
+            if (savedNotes) {
+                editorElement.innerHTML = savedNotes;
+            }
+        });
+
+        // Auto-save whenever the user types
+        editorElement.addEventListener('input', () => {
+            localStorage.setItem('kselis_notes_state', editorElement.innerHTML);
+        });
+
+        // Ensure formatting actions trigger a save
+        const originalHandleAction = handleAction;
+        handleAction = function(type, arg1, arg2) {
+            originalHandleAction(type, arg1, arg2);
+            localStorage.setItem('kselis_notes_state', editorElement.innerHTML);
+        };
+
+        // Clear notes function
+        function clearNotes() {
+            if (confirm("Are you sure you want to clear your notes? This cannot be undone.")) {
+                editorElement.innerHTML = `
+                    <h1>Note Title</h1>
+                    <div class="section">
+                        <h2>Introduction</h2>
+                        <p>Start typing your content here...</p>
+                    </div>
+                `;
+                localStorage.removeItem('kselis_notes_state');
+            }
         }
     </script>
 </body>
