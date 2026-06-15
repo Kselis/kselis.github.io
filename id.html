@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kselis ID Card</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Core Kselis Variables */
+        :root {
+            --bg-color: #fafafa;
+            --card-bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #555555;
+            --border-color: #eaeaea;
+            --accent: #667eea;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #e5e7eb; /* Slightly darker background to make the white card pop */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* The ID Card Container */
+        .id-card {
+            width: 280px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Top Accent Bar */
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--accent);
+        }
+
+        /* Header (Logo + Text) */
+        .id-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .id-header img {
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Cormorant Infant', serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        /* Profile Photo Placeholder */
+        .id-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Placeholder graphic for the photo */
+        .id-photo svg {
+            width: 50px;
+            height: 50px;
+            fill: #cccccc;
+        }
+
+        /* User Details */
+        .id-details {
+            text-align: center;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .name {
+            font-family: 'Cormorant Infant', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 4px 0;
+            line-height: 1.1;
+        }
+
+        .position {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin: 0 0 12px 0;
+        }
+
+        /* SID Badge */
+        .sid {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--bg-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid var(--border-color);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Footer / QR Code Area */
+        .id-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 20px;
+            margin-top: auto;
+        }
+
+        .qr-code {
+            width: 65px;
+            height: 65px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .verify-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="id-card">
+        <div class="id-header">
+            <img src="https://kselis.github.io/kselis_logo/kselis_logo_nobg_light.png" alt="Kselis Logo">
+            <span class="logo-text">KSELIS</span>
+        </div>
+
+        <div class="id-photo">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+        </div>
+
+        <div class="id-details">
+            <h2 class="name">Prakhar</h2>
+            <p class="position">Lead Maintainer</p>
+            <p class="sid">SID: KSL-2024-001</p>
+        </div>
+
+        <div class="id-footer">
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Verify:KSL-2024-001" alt="Verification QR Code">
+            </div>
+            <div class="verify-text">Scan to Verify</div>
+        </div>
+    </div>
+
+</body>
+</html>
