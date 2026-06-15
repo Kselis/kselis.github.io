@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kselis Landscape ID Card</title>
+    <title>Kselis Landscape ID Card - High Res</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Cormorant+Infant:wght@600;700&display=swap" rel="stylesheet">
 
@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Raleway', sans-serif;
-            background-color: #e5e7eb; /* Slightly darker backdrop for viewing the card */
+            background-color: #e5e7eb;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,16 +28,16 @@
             margin: 0;
         }
 
-        /* Landscape Card Dimensions (CR80 Standard Ratio approx) */
+        /* Scaled to 1011x638 Dimensions */
         .id-card {
-            width: 480px;
-            height: 300px;
+            width: 1011px;
+            height: 638px;
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px; /* Soft UI corner */
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03); /* Extremely subtle shadow from the repo */
+            border: 2px solid var(--border-color);
+            border-radius: 25px; 
+            box-shadow: 0 16px 60px rgba(0, 0, 0, 0.05); 
             display: flex;
-            padding: 24px;
+            padding: 50px;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
@@ -49,9 +49,9 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 6px;
+            width: 12px;
             height: 100%;
-            background: var(--text-main); /* Using black/dark grey instead of blue to keep it grayscale/minimal */
+            background: var(--text-main); 
         }
 
         /* --- LEFT COLUMN: PHOTO & QR --- */
@@ -60,18 +60,18 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            width: 120px;
-            margin-right: 24px;
+            width: 250px;
+            margin-right: 50px;
             height: 100%;
         }
 
-        /* Passport Size Photo Box (4:5 Ratio) */
+        /* Passport Size Photo Box (Scaled 4:5 Ratio) */
         .passport-photo {
-            width: 120px;
-            height: 150px;
+            width: 250px;
+            height: 312px;
             background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -80,19 +80,19 @@
 
         /* SVG Placeholder for Photo */
         .passport-photo svg {
-            width: 60px;
-            height: 60px;
+            width: 125px;
+            height: 125px;
             fill: #cccccc;
         }
 
         /* Mini QR Code */
         .qr-box {
-            width: 70px;
-            height: 70px;
+            width: 150px;
+            height: 150px;
             background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 4px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -102,7 +102,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            mix-blend-mode: multiply; /* Ensures white QR background blends cleanly */
+            mix-blend-mode: multiply; 
         }
 
         /* --- RIGHT COLUMN: BRANDING & DATA --- */
@@ -118,30 +118,30 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
+            gap: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
         }
 
         .brand-header img {
-            height: 35px;
+            height: 75px;
             object-fit: contain;
         }
 
         .logo-text {
             font-family: 'Cormorant Infant', serif;
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 3.3rem;
             color: var(--text-main);
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         /* User Details */
         .user-info {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 25px;
             flex-grow: 1;
             justify-content: center;
         }
@@ -149,27 +149,27 @@
         .data-group {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
 
         .label {
-            font-size: 0.65rem;
+            font-size: 1.3rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888888; /* Slightly lighter than text-muted for high contrast against values */
+            letter-spacing: 2px;
+            color: #888888; 
             font-weight: 700;
         }
 
         .name-text {
             font-family: 'Cormorant Infant', serif;
-            font-size: 2.2rem;
+            font-size: 4.6rem;
             font-weight: 700;
             color: var(--text-main);
             line-height: 1;
         }
 
         .position-text {
-            font-size: 1.05rem;
+            font-size: 2.2rem;
             font-weight: 600;
             color: var(--text-muted);
         }
@@ -178,15 +178,15 @@
         .sid-box {
             display: inline-block;
             background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            padding: 12px 25px;
+            border-radius: 12px;
             font-family: monospace;
-            font-size: 0.95rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--text-main);
             align-self: flex-start;
-            margin-top: 2px;
+            margin-top: 4px;
         }
     </style>
 </head>
@@ -201,7 +201,7 @@
             </div>
             
             <div class="qr-box">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&color=111111&data=Verify:Prakhar-KSL-2024-001" alt="Verification QR">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=0&color=111111&data=Verify:Prakhar-KSL-2024-001" alt="Verification QR">
             </div>
         </div>
 
