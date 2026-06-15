@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kselis Landscape ID Card</title>
+    <title>Kselis ID Card</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
-
+    
     <style>
-        /* Exact CSS Variables from the Kselis Website */
+        /* Core Kselis Variables */
         :root {
             --bg-color: #fafafa;
             --card-bg: #ffffff;
@@ -28,30 +28,32 @@
             margin: 0;
         }
 
-        /* Landscape Card Dimensions */
+        /* The ID Card Container */
         .id-card {
-            width: 480px;
-            height: 300px;
+            width: 280px;
+            height: 450px;
             background: var(--card-bg);
+            border-radius: 16px;
             border: 1px solid var(--border-color);
-            border-radius: 12px; 
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03); 
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             display: flex;
-            padding: 24px;
-            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
-        /* Subtle Accent Strip on the left edge */
+        /* Top Accent Bar */
         .id-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 6px;
-            height: 100%;
-            background: var(--text-main); 
+            width: 100%;
+            height: 6px;
+            background: var(--accent);
             z-index: 2;
         }
 
@@ -60,85 +62,28 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-30%, -50%); /* Shifted slightly right to center in the text area */
-            width: 250px;
-            opacity: 0.06; /* High transparency */
+            transform: translate(-50%, -50%);
+            width: 220px;
+            opacity: 0.06; /* Low opacity / high transparency */
             pointer-events: none;
             z-index: 0;
         }
 
         /* Ensure content stays above the watermark */
-        .card-left, .card-right {
+        .card-content {
             position: relative;
             z-index: 1;
-        }
-
-        /* --- LEFT COLUMN: PHOTO & QR --- */
-        .card-left {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            width: 120px;
-            margin-right: 24px;
-            height: 100%;
-        }
-
-        /* Passport Size Photo Box (4:5 Ratio) */
-        .passport-photo {
-            width: 120px;
-            height: 150px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .passport-photo svg {
-            width: 60px;
-            height: 60px;
-            fill: #cccccc;
-        }
-
-        /* Mini QR Code */
-        .qr-box {
-            width: 70px;
-            height: 70px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .qr-box img {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            mix-blend-mode: multiply; 
-        }
-
-        /* --- RIGHT COLUMN: BRANDING & DATA --- */
-        .card-right {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
             height: 100%;
         }
 
         /* Header (ID CARD Text) */
-        .brand-header {
-            display: flex;
-            justify-content: flex-end; /* Keeps the text aligned to the top right */
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
+        .id-header {
+            margin-bottom: 25px;
+            text-align: center;
         }
 
         .header-title {
@@ -150,56 +95,102 @@
             margin: 0;
         }
 
-        /* User Details */
-        .user-info {
+        /* Profile Photo Placeholder */
+        .id-photo {
+            width: 105px;
+            height: 130px; /* Adjusted closer to passport ratio */
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-grow: 1;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
-        .data-group {
+        .id-photo svg {
+            width: 50px;
+            height: 50px;
+            fill: #cccccc;
+        }
+
+        /* User Details */
+        .id-details {
+            text-align: center;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 4px 0;
+            line-height: 1.1;
+        }
+
+        .position {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin: 0 0 12px 0;
+        }
+
+        /* SID Badge */
+        .sid {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--bg-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid var(--border-color);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Footer / QR Code Area */
+        .id-footer {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 15px;
+            margin-top: auto;
         }
 
-        .label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888888; 
-            font-weight: 700;
-        }
-
-        .name-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1;
-        }
-
-        .position-text {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        /* Special ID Format */
-        .sid-box {
-            display: inline-block;
-            background: var(--bg-color);
+        .qr-code {
+            width: 65px;
+            height: 65px;
+            background: #fff;
             border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 0.95rem;
+            border-radius: 8px;
+            padding: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .verify-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
             font-weight: 700;
-            color: var(--text-main);
-            align-self: flex-start;
-            margin-top: 2px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -208,38 +199,28 @@
     <div class="id-card">
         <img src="https://kselis.github.io/kselis_logo/kselis_logo_nobg_light.png" alt="" class="watermark">
 
-        <div class="card-left">
-            <div class="passport-photo">
+        <div class="card-content">
+            <div class="id-header">
+                <h1 class="header-title">ID CARD</h1>
+            </div>
+
+            <div class="id-photo">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
             </div>
-            
-            <div class="qr-box">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&color=111111&data=Verify:Prakhar-KSL-2024-001" alt="Verification QR">
-            </div>
-        </div>
 
-        <div class="card-right">
-            <div class="brand-header">
-                <h1 class="header-title">ID CARD</h1>
+            <div class="id-details">
+                <h2 class="name">Prakhar Gupta</h2>
+                <p class="position">Lead Maintainer</p>
+                <p class="sid">SID: KSL-2024-001</p>
             </div>
 
-            <div class="user-info">
-                <div class="data-group">
-                    <span class="label">Name</span>
-                    <span class="name-text">Prakhar Gupta</span>
+            <div class="id-footer">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Verify:KSL-2024-001" alt="Verification QR Code">
                 </div>
-                
-                <div class="data-group">
-                    <span class="label">Position</span>
-                    <span class="position-text">Lead Maintainer</span>
-                </div>
-
-                <div class="data-group">
-                    <span class="label">Special ID (SID)</span>
-                    <span class="sid-box">KSL-2024-001</span>
-                </div>
+                <div class="verify-text">Scan to Verify</div>
             </div>
         </div>
     </div>
