@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="[https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap](https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap)" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../../kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
+  <title>Kselis Note - Hyperlinks, Alt-Text, and Image Embedding</title>
+</head>
+<body>
+  <h1 class="title">Navigating the Web: Hyperlinks, Alt-Text, and Image Embedding</h1>
+<p>Think about browsing the internet every day. You click on a link to jump from one page to another, you look at a picture, and sometimes you embed a graphic right into your story. These three things—hyperlinks, alt-text, and image embedding—are the invisible tools that make the web work smoothly for everyone.</p>
+<p>We’re going to explore how these elements work together to ensure that not only humans can easily navigate the web but that machines (like search engines and screen readers) can also understand exactly what we are showing them.</p>
+
+<div class="section">
+  <h2>Understanding Hyperlinks: The Web's Roads</h2>
+  <p>A hyperlink is simply a clickable link that takes you from one location on a page to another. It’s the backbone of the entire World Wide Web!</p>
+</div >
+
+<div class="analogy">
+  Imagine the internet is a giant city, and every webpage is a building. Hyperlinks are like the street signs and road maps that connect those buildings. When you click a link, it’s like following a sign to get from your current location to a new destination. Without links, the web would just be a collection of isolated buildings!
+</div>
+
+<div class="section">
+  <h2>The Power of Alt-Text: Describing What You See</h2>
+  <p>Alt-text (alternative text) is the short description you write for an image. It’s not just something you put there to make the page look pretty; it’s crucial for accessibility and search engines.</p>
+</div >
+
+<div class="analogy">
+  Think about someone who uses a screen reader—a tool that reads the content of the screen aloud to people who are blind. If you just label an image "picture1.jpg," the screen reader will say nothing useful. But if you write descriptive alt-text like, "A golden retriever puppy playing in a green field," the screen reader can tell the user exactly what the picture is about. It lets people who cannot see the image experience the same information you do.
+</div>
+
+<div class="section">
+  <h2>Image Embedding: Placing Pictures Where They Belong</h2>
+  <p>Image embedding is the technical process of placing an image file directly into your HTML document so that it appears on the page. This is how we bring visuals into our text.</p>
+</div >
+
+<div class="analogy">
+  If a hyperlink is the road, image embedding is like putting a specific piece of furniture—a beautiful painting or a photograph—right onto that road to make the journey more interesting and informative for everyone traveling through it.
+</div>
+
+<div class="section">
+  <h2>Putting It All Together: The Code Example</h2>
+  <p>Here is how these three concepts work together when you put an image on a webpage:</p>
+  <pre><code>&lt;img src="my_photo.jpg" alt="A happy golden retriever puppy playing in a green field"&gt;</code></pre>
+<p>See how the `src` points to the actual picture, and the `alt` attribute provides that essential description for everyone else!</p>
+
+<div class="section">
+  <h2>Quick Comparison Table</h2>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead class="table-header">
+      <tr class="table-row">
+        <th class="col-aspect">Element</th>
+        <th class="col-desc">What It Does</th>
+        <th class="col-impact">Why It Matters</th>
+      </tr>
+    </thead>
+    <tbody class="table-body">
+      <tr class="table-row">
+        <td class="col-aspect">Hyperlink</td>
+        <td class="col-desc">Connects one page to another.</td>
+        <td class="col-impact">Navigation and site structure.</td>
+      </tr>
+      <tr class="table-row">
+        <td class="col-aspect">Alt-Text</td>
+        <td class="col-desc">Provides a text description for an image.</td>
+        <td class="col-impact">Accessibility (screen readers) and SEO.</td>
+      </tr>
+      <tr class="table-row">
+        <td class="col-aspect">Image Embedding</td>
+        <td class="col-desc">Places the actual picture onto the page.</td>
+        <td class="col-impact">Visual storytelling and content richness.</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <a class="button" id="print" onclick="window.print()">Save as PDF</a>
+</body>
+</html>

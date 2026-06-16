@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="[https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap](https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap)" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../../kselis_logo/kselis_logo_nobg_light.png" type="image/x-icon">
+  <title>Kselis Note - Advanced Tables, Alignment Syntax, and Escaping Pipes</title>
+</head>
+<body>
+  <h1 class="title">Mastering Tables, Alignment, and Pipes: Making Your Data Look Brilliant</h1>
+<p>Have you ever looked at a spreadsheet or a report where the numbers and text are all jumbled up? It looks messy, right? Well, mastering how to structure tables, align things perfectly, and handle special characters like pipes can turn that messy data into a crystal-clear presentation. We’re not just learning code; we’re learning how to communicate information beautifully.</p>
+
+<div class="section">
+  <h2 class="subsection">The Power of Advanced Tables</h2>
+  <p>A basic HTML table is great for simple lists, but when you start dealing with complex data—like comparing product features or tracking project milestones—you need more control. Advanced tables let you build structures that are not just pretty, but also logically sound.</p>
+</div>
+
+<div class="analogy">
+  Think of a basic table like a simple wooden frame. It holds the pieces together. An advanced table is like building a custom piece of furniture: you don't just put planks down; you design exactly where every shelf, drawer, and support beam goes. You control the structure so that if you add more items later, the whole thing doesn't collapse.
+</div>
+
+<div class="section">
+  <h2 class="subsection">Controlling Alignment: Making Everything Line Up</h2>
+  <p>Alignment is all about visual order. We want our columns to line up neatly, whether we are dealing with numbers that need to be right-aligned or text that needs to be centered.</p>
+</div>
+
+<div class="analogy">
+  Imagine you are arranging books on a shelf. If you just stack them randomly, it looks chaotic. Alignment is like using guide rails—you use the left edge of one book as a reference point for all the others so they sit perfectly side-by-side. In tables, this means telling the browser exactly where to position the text and numbers within their boxes.
+</div>
+
+<div class="section">
+  <h2 class="subsection">The Magic of Escaping Pipes</h2>
+  <p>Pipes (the vertical bar symbol, |) are super useful for separating data, but sometimes they cause trouble when you try to display them in a system. This is where escaping comes in. It’s like teaching the computer a secret code so it knows how to read something that looks like a command instead of just seeing a character.</p>
+</div>
+
+<div class="analogy">
+  Imagine you are writing a secret message, and you want to write the word "pipe" ( | ). If you just write it down, someone might think you are trying to run a command. Escaping is like putting quotation marks around the pipe—you are telling the reader, "Don't treat this symbol as a command; treat it only as a letter." It changes how the computer interprets the character so it displays correctly instead of executing an action.
+</div>
+
+<div class="section">
+  <h2 class="subsection">Putting It Together: Syntax and Practice</h2>
+  <p>When we talk about alignment syntax, we are talking about specific commands or attributes that tell the table how to distribute its content. For escaping pipes, we are dealing with the rules of the environment you are working in.</p>
+</div>
+
+<div class="table-example">
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead style="background-color: #f2f2f2;">
+      <tr>
+        <th style="text-align: left;">Item</th>
+        <th style="text-align: center;">Quantity</th>
+        <th style="text-align: right;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Apples</td>
+        <td style="text-align: center;">150</td>
+        <td style="text-align: right;">$3.50</td>
+      </tr>
+      <tr>
+        <td>Bananas</td>
+        <td style="text-align: center;">200</td>
+        <td style="text-align: right;">$2.75</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2 class="subsection">Quick Alignment Guide</h2>
+  <p>To make your data look professional, you use specific alignment instructions:</p>
+  <ul>
+    <li><b style="color: #007bff;">text-align: left;</b> (Default for most text)</li>
+    <li><b style="color: #28a745;">text-align: center;</b> (Perfect for centering numbers or titles)</li>
+    <li><b style="color: #dc3545;">text-align: right;</b> (Essential for aligning currency and numbers neatly on the right side)</li>
+  </ul>
+
+<div class="analogy">
+  Think of alignment as choosing the right tool for the job. If you are showing a list of names, you use left alignment. If you are showing a scoreboard where scores need to be perfectly centered between two columns, you use center alignment. You pick the tool that matches the visual goal.
+</div>
+
+<div class="section">
+  <h2 class="subsection">Handling Pipes in Data Flow</h2>
+  <p>When data is piped from one system to another (like a command line), and it contains a pipe symbol, the receiving system might get confused. To fix this, you use an escape character—often a backslash (\) or a specific quote mark—to tell the system, "Hey, treat this symbol as plain text, not a command."</p>
+</div>
+  <br>
+  <a class="button" id="print" onclick="window.print()">Save as PDF</a>
+</body>
+</html>
