@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;700&display=swap');
 
-
+body{
+    background-image: 
+        linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
 /* General Reset */
 * {
     margin: 0;
