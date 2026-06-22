@@ -120,6 +120,64 @@
         }
         .export-btn:hover { background-color: #444; }
         .export-btn .material-symbols-outlined { color: #fff; }
+        /* --- NEW: IMAGE BLOCK STYLES --- */
+        #editor .image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+            padding: 24px;
+            background: #fafafa;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+        }
+
+        #editor .image-section img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            object-fit: contain;
+        }
+
+        #editor .image-section .caption {
+            margin-top: 16px;
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            width: 100%;
+            outline: none; /* Removes the blue box when typing */
+        }
+
+        /* --- NEW: PDF EXPORT (PRINT) STYLES --- */
+        @media print {
+            body { 
+                background-color: white; 
+                height: auto; 
+                overflow: visible; 
+            }
+            .sidebar, .mobile-tooltip { 
+                display: none !important; /* Hides the UI */
+            }
+            .editor-container { 
+                padding: 0; 
+                overflow: visible; 
+                display: block; 
+            }
+            #editor {
+                border: none; 
+                box-shadow: none; 
+                padding: 0;
+                max-width: 100%; 
+                min-height: auto;
+            }
+            /* Ensure background colors in code/example blocks print */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
 
         /* --- THE EDITOR "PAPER" CANVAS --- */
         .editor-container {
@@ -320,6 +378,11 @@
                 <span class="material-symbols-outlined">edit_note</span> 
                 <span class="btn-text">Example Box</span>
             </button>
+            <button class="tool-btn" title="Insert Image" onclick="document.getElementById('imageUpload').click()">
+                <span class="material-symbols-outlined">image</span> 
+                <span class="btn-text">Insert Image</span>
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
             
             <div class="divider"></div>
             
@@ -342,6 +405,11 @@
         <button class="tool-btn" title="Clear Notes" onclick="clearNotes()" style="color: #c62828;">
             <span class="material-symbols-outlined" style="color: #c62828;">delete_sweep</span> 
             <span class="btn-text">Clear Notes</span>
+        </button>
+
+        <button class="export-btn" title="Export as PDF" onclick="window.print()" style="margin-top: 10px; background-color: #667eea;">
+            <span class="material-symbols-outlined">picture_as_pdf</span> 
+            <span class="btn-text">Export PDF</span>
         </button>
 
         <button class="export-btn" title="Save & Export" onclick="handleAction('export')" style="margin-top: 15px;">
@@ -545,6 +613,55 @@
                 `;
                 localStorage.removeItem('kselis_notes_state');
             }
+        }
+        // --- 7. Image Upload Logic ---
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const imgData = e.target.result;
+                
+                // Create the new block
+                const block = document.createElement('div');
+                block.className = 'image-section';
+                // Make the caption contenteditable so the user can describe it
+                block.innerHTML = `
+                    <img src="${imgData}" alt="User inserted image">
+                    <div class="caption" contenteditable="true">Click here to add an image description...</div>
+                `;
+
+                // Insert at cursor position
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0 && document.getElementById('editor').contains(selection.anchorNode)) {
+                    const range = selection.getRangeAt(0);
+                    range.deleteContents();
+                    range.insertNode(block);
+                    
+                    // Add a blank line after the image to continue typing
+                    const p = document.createElement('p');
+                    p.innerHTML = '<br>';
+                    block.parentNode.insertBefore(p, block.nextSibling);
+                    
+                    range.setStart(p, 0);
+                    range.collapse(true);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                } else {
+                    document.getElementById('editor').appendChild(block);
+                }
+
+                // Reset the input so the same image can be uploaded again if needed
+                event.target.value = '';
+                
+                // Trigger the local storage save
+                localStorage.setItem('kselis_notes_state', document.getElementById('editor').innerHTML);
+            };
+            
+            // Read the image file as a Data URL string
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
