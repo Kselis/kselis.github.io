@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Advanced Pseudocode Sandbox V2</title>
+    <title>Advanced Pseudocode Sandbox V2 (Patched)</title>
     <style>
         body { margin: 0; display: flex; height: 100vh; font-family: sans-serif; background: #1e1e1e; color: #ccc; }
         #editor-container { width: 60%; height: 100%; }
@@ -27,6 +27,17 @@
     <div id="console">Ready...<br><br></div>
 </div>
 
+<script>
+    window.MonacoEnvironment = {
+        getWorkerUrl: function(workerId, label) {
+            return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+                self.MonacoEnvironment = { baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/' };
+                importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs/base/worker/workerMain.js');
+            `)}`;
+        }
+    };
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs/loader.min.js"></script>
 <script>
     let editor;
@@ -34,7 +45,6 @@
     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs' }});
     require(['vs/editor/editor.main'], function() {
         
-        // 1. Updated Syntax Highlighter with Data Structures
         monaco.languages.register({ id: 'pseudocode' });
         monaco.languages.setMonarchTokensProvider('pseudocode', {
             tokenizer: {
@@ -60,7 +70,6 @@
             ]
         });
 
-        // 2. Default code demonstrating the new structures
         editor = monaco.editor.create(document.getElementById('editor-container'), {
             value: [
                 "' --- 1. LISTS (Mutable Arrays) ---",
@@ -69,15 +78,15 @@
                 "PRINT \"List: \" + users",
                 "",
                 "' --- 2. SETS (Unique Values Only) ---",
-                "CREATE SET_DATA ids = [101, 102, 101, 103] ' Duplicate 101 will be ignored",
+                "CREATE SET_DATA ids = [101, 102, 101, 103]",
                 "APPEND 104 TO ids",
                 "PRINT \"Set: \" + ids",
                 "",
-                "' --- 3. TUPLES (Immutable/Locked Arrays) ---",
+                "' --- 3. TUPLES (Immutable Arrays) ---",
                 "CREATE TUPLE coordinates = (45.5, -122.6)",
                 "PRINT \"Tuple: \" + coordinates",
                 "",
-                "' --- 4. Iterating over a Data Structure ---",
+                "' --- 4. Iterating ---",
                 "FOR EACH user IN users",
                 "    PRINT \"Greeting: Hello \" + user",
                 "ENDFOR"
@@ -89,43 +98,21 @@
         });
     });
 
-    // 3. The Upgraded Execution Engine
     function executePseudocode() {
         const code = editor.getValue();
         const consoleDiv = document.getElementById('console');
         consoleDiv.innerHTML = ""; 
         let jsCode = code;
         
-        // --- TRANSLATOR: Pseudocode -> JavaScript ---
-        jsCode = jsCode.replace(/'(.*)$/gm, ''); // Strip comments
-        
-        // Variable Assignment
+        jsCode = jsCode.replace(/'(.*)$/gm, ''); 
         jsCode = jsCode.replace(/\bSET\b\s+([a-zA-Z_]\w*)\s+\bTO\b/g, 'let $1 ='); 
-        
-        // --- NEW: DATA STRUCTURES ---
-        // CREATE LIST my_list = [1, 2] -> let my_list = [1, 2];
         jsCode = jsCode.replace(/\bCREATE\s+LIST\s+([a-zA-Z_]\w*)\s*=\s*(\[.*?\])/g, 'let $1 = $2;');
-        
-        // CREATE SET_DATA my_set = [1, 2, 2] -> let my_set = new Set([1, 2, 2]);
-        // Note: Used SET_DATA as keyword to avoid conflict with variable assignment "SET x TO y"
         jsCode = jsCode.replace(/\bCREATE\s+SET_DATA\s+([a-zA-Z_]\w*)\s*=\s*(\[.*?\])/g, 'let $1 = new Set($2);');
-        
-        // CREATE TUPLE my_tuple = (1, 2) -> let my_tuple = Object.freeze([1, 2]);
         jsCode = jsCode.replace(/\bCREATE\s+TUPLE\s+([a-zA-Z_]\w*)\s*=\s*\((.*?)\)/g, 'let $1 = Object.freeze([$2]);');
-
-        // --- NEW: DATA METHODS ---
-        // APPEND x TO list -> smartAppend(list, x) (Handles both arrays and sets)
         jsCode = jsCode.replace(/\bAPPEND\s+(.*?)\s+TO\s+([a-zA-Z_]\w*)/g, 'if($2.push){$2.push($1)}else if($2.add){$2.add($1)};');
-        
-        // REMOVE x FROM list -> (Handles both arrays and sets)
         jsCode = jsCode.replace(/\bREMOVE\s+(.*?)\s+FROM\s+([a-zA-Z_]\w*)/g, 'if($2.delete){$2.delete($1)}else if($2.indexOf){let idx=$2.indexOf($1);if(idx>-1)$2.splice(idx,1)};');
-
-        // --- NEW: FOR EACH LOOPS ---
-        // FOR EACH item IN list -> for(let item of list) {
         jsCode = jsCode.replace(/\bFOR\s+EACH\s+([a-zA-Z_]\w*)\s+IN\s+([a-zA-Z_]\w*)/g, 'for(let $1 of $2) {');
         jsCode = jsCode.replace(/\bENDFOR\b/g, '}');
-
-        // Logic & Printing
         jsCode = jsCode.replace(/\bPRINT\b\s+(.*)$/gm, 'safePrint($1);'); 
         jsCode = jsCode.replace(/\bWHILE\b\s+(.*)$/gm, 'while ($1) {'); 
         jsCode = jsCode.replace(/\bENDWHILE\b/g, '}'); 
@@ -133,16 +120,12 @@
         jsCode = jsCode.replace(/\bELSE\b/g, '} else {'); 
         jsCode = jsCode.replace(/\bENDIF\b/g, '}'); 
 
-        // Helper to format Sets, Arrays, and Tuples nicely in the console output
         const safePrint = (msg) => {
             const line = document.createElement('div');
             line.className = 'console-output';
-            
-            // Format Data structures so they don't just print "[object Object]"
             if (msg instanceof Set) {
                 line.textContent = "{" + Array.from(msg).join(", ") + "}";
             } else if (Array.isArray(msg)) {
-                // If it's frozen, we pretend it's a tuple () in the output
                 if(Object.isFrozen(msg)) {
                     line.textContent = "(" + msg.join(", ") + ")";
                 } else {
@@ -154,7 +137,6 @@
             consoleDiv.appendChild(line);
         };
 
-        // --- EXECUTION ---
         try {
             const execute = new Function('safePrint', jsCode);
             execute(safePrint);
@@ -167,6 +149,5 @@
         }
     }
 </script>
-
 </body>
 </html>
