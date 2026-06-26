@@ -842,6 +842,18 @@ th { background-color: #fafafa; font-weight: 600; color: #444; }
             // Read the image file as a Data URL string
             reader.readAsDataURL(file);
         }
+        // --- 8. Prevent Rich Text Pasting (Force Plain Text) ---
+        document.getElementById('editor').addEventListener('paste', function(e) {
+            // Stop data from actually being pasted with formatting
+            e.preventDefault();
+
+            // Grab the plain text from the clipboard (ignores HTML/CSS)
+            const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+            // Insert the plain text at the cursor position
+            // Using execCommand ensures the "Undo" (Ctrl+Z) function still works!
+            document.execCommand('insertText', false, text);
+        });
     </script>
 </body>
 </html>
