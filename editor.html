@@ -587,6 +587,7 @@
   <script src=\"https://kselis.github.io/computational_thinking/playground/sandbox.js\" defer><\/script>
   
   <title>Kselis Note</title>
+  
 </head>
 <body>
 ${content}
@@ -595,6 +596,49 @@ ${content}
     <a class="button action-btn" onclick="window.print()">Save as PDF</a>
     <a class="button action-btn" href="#">Next Chapter</a>
 </div>
+<!-- Interactive Timer UI (Self-contained) -->
+<button class="timer-circle" id="timer-toggle" aria-label="Toggle Timer">
+  <div id="minimal-timer">00:00</div>
+  <div id="timer-icon">⏸</div>
+</button>
+
+<script>
+let totalSeconds = 0;
+let timerInterval = null;
+let isRunning = true;
+
+const timerDisplay = document.getElementById('minimal-timer');
+const timerIcon = document.getElementById('timer-icon');
+const toggleBtn = document.getElementById('timer-toggle');
+
+function updateDisplay() {
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    timerDisplay.textContent = `${minutes}:${seconds}`;
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        totalSeconds++;
+        updateDisplay();
+    }, 1000);
+    timerIcon.textContent = '⏸';
+    isRunning = true;
+}
+
+function pauseTimer() {
+    clearInterval(timerInterval);
+    timerIcon.textContent = '▶';
+    isRunning = false;
+}
+
+toggleBtn.addEventListener('click', () => {
+    if (isRunning) pauseTimer();
+    else startTimer();
+});
+
+startTimer();
+</script>
 </body>
 </html>`;
 
@@ -794,7 +838,49 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
 .term-prompt { color: var(--accent); margin-right: 8px; }
 .term-input { background: transparent; border: none; color: var(--text-main); font-family: var(--font-mono); font-size: 13px; flex-grow: 1; outline: none; }
 .hidden { display: none !important; }
+/* Sleek, clickable circular timer */
+.timer-circle {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 1.5px solid #d5d5d5; /* Thinner, lighter border */
+    background: var(--bg-backdrop, #fafafa);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer; /* Entire circle is now the button */
+    font-family: 'Raleway', sans-serif;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Softer shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    color: var(--text-primary, #333);
+    padding: 0;
+    outline: none;
+}
 
+.timer-circle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    background: #fdfdfd;
+}
+
+#minimal-timer {
+    font-size: 15px;
+    font-weight: 500; /* Much lighter font weight */
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+#timer-icon {
+    font-size: 10px;
+    color: #888;
+    line-height: 1;
+}
 /* Responsive adjustments */
 @media (max-width: 900px) {
     body { margin: 0; padding: 30px 20px; }
@@ -805,10 +891,20 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
     .editor-panel { height: 40vh; }
     .variables-panel { height: 25vh; }
     .terminal-panel { height: 35vh; }
+    .timer-circle {
+            top: auto; 
+            bottom: 24px; /* Moves to bottom right on phones */
+            right: 24px;
+            width: 60px;
+            height: 60px;
+        }
+        #minimal-timer { font-size: 13px; }
+        #timer-icon { font-size: 9px; }
 }
 
 @media print {
     html, body { background: white !important; height: auto; margin: 0; padding: 0; max-width: 100%; }
+    .timer-circle { display: none !important; }
     #print { display: none !important; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }`;
