@@ -581,10 +581,10 @@
   <link rel="stylesheet" href="style.css">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"><\/script>
-  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css\">
-  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/darcula.min.css\">
-  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js\"><\/script>
-  <script src=\"https://kselis.github.io/computational_thinking/playground/sandbox.js\" defer><\/script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/darcula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"><\/script>
+  <script src="https://kselis.github.io/computational_thinking/playground/sandbox.js" defer><\/script>
   
   <title>Kselis Note</title>
   
@@ -614,7 +614,7 @@ const toggleBtn = document.getElementById('timer-toggle');
 function updateDisplay() {
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
-    timerDisplay.textContent = `${minutes}:${seconds}`;
+    timerDisplay.textContent = \`\${minutes}:\${seconds}\`;
 }
 
 function startTimer() {
@@ -640,7 +640,7 @@ toggleBtn.addEventListener('click', () => {
 startTimer();
 <\/script>
 </body>
-</html>`;
+</html>`; // Note: No backslash before this backtick!
 
             const blob = new Blob([fullHTML], { type: "text/html" });
             const url = URL.createObjectURL(blob);
@@ -697,10 +697,7 @@ body {
     color: var(--text-primary);
     line-height: 1.7;
     font-size: 1.05rem;
-    
-   
-    
-    max-width: 1000px; /* Adjusted down slightly for better reading width */
+    max-width: 1000px;
     margin: 40px auto;
     padding: 60px 80px;
     border: none;
@@ -740,9 +737,9 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
 /* --- BUTTON GROUP LAYOUT --- */
 .button-group {
     display: flex;
-    justify-content: center; /* Centers the buttons horizontally */
+    justify-content: center;
     align-items: center;
-    gap: 16px; /* Adds perfect spacing between the buttons */
+    gap: 16px;
     margin: 40px auto 0 auto;
     width: 100%;
 }
@@ -750,7 +747,7 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
 /* --- ACTION BUTTON STYLING --- */
 .action-btn { 
     background-color: var(--accent-color); 
-    color: #fff !important; /* Forces text to stay white */
+    color: #fff !important; 
     padding: 12px 24px; 
     border-radius: 8px; 
     font-weight: 600; 
@@ -758,7 +755,7 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
     text-align: center; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     transition: background 0.2s, transform 0.1s;
-    text-decoration: none; /* Removes underlines */
+    text-decoration: none; 
     display: inline-block;
 }
 
@@ -846,16 +843,16 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    border: 1.5px solid #d5d5d5; /* Thinner, lighter border */
+    border: 1.5px solid #d5d5d5;
     background: var(--bg-backdrop, #fafafa);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    cursor: pointer; /* Entire circle is now the button */
+    cursor: pointer;
     font-family: 'Raleway', sans-serif;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Softer shadow */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     color: var(--text-primary, #333);
     padding: 0;
@@ -870,7 +867,7 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
 
 #minimal-timer {
     font-size: 15px;
-    font-weight: 500; /* Much lighter font weight */
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     margin-bottom: 4px;
@@ -893,7 +890,7 @@ th { background-color: #f0f0f0; font-weight: 600; color: #333; }
     .terminal-panel { height: 35vh; }
     .timer-circle {
             top: auto; 
-            bottom: 24px; /* Moves to bottom right on phones */
+            bottom: 24px;
             right: 24px;
             width: 60px;
             height: 60px;
